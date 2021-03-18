@@ -3,6 +3,8 @@ package edu.pt.ua.tqs.s92972.lab1;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.NoSuchElementException;
+import java.lang.IllegalArgumentException;
+import java.lang.IllegalStateException;
 
 class TqsStackTest {
 
@@ -12,7 +14,7 @@ class TqsStackTest {
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
         tsEmpty = new TqsStack();
-        tsThree = new TqsStack();
+        tsThree = new TqsStack(3);
         tsThree.push("One");
         tsThree.push("Two");
         tsThree.push("Three");
@@ -23,8 +25,15 @@ class TqsStackTest {
     }
 
     @org.junit.jupiter.api.Test
-    void push() {
+    void constructor() {
+        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(-1), "The stack bound must be a natural number!");
+        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(0), "The stack bound must be a natural number!");
+    }
 
+    @org.junit.jupiter.api.Test
+    void push() {
+        assertThrows(IllegalStateException.class, () -> tsThree.push("Four"), "For bounded stacks only, pushing onto a full stack throw an IllegalStateException.;");
+        assertDoesNotThrow(() -> tsEmpty.push("Four"), "For bounded stacks only, pushing onto a full stack throw an IllegalStateException.;");
     }
 
     @org.junit.jupiter.api.Test
