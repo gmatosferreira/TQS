@@ -33,7 +33,6 @@ class TqsStackTest {
 
         tsThree.pop();
         tsThree.pop();
-        tsThree.pop();
         assertEquals(0, tsThree.size(), "After n pops at a stack with n elements, its size will be 0.");
 
         assertThrows(NoSuchElementException.class, () -> tsThree.pop(), "Popping from an empty stack throw a NoSuchElementException.");
@@ -41,7 +40,7 @@ class TqsStackTest {
 
     @org.junit.jupiter.api.Test
     void peek() {
-        assertEquals("Three", tsThree.pop(), "The element popped is the last pushed.");
+        assertEquals("Three", tsThree.peek(), "The element popped is the last pushed.");
         assertAll(
                 () -> assertEquals("Three", tsThree.peek(), "The element peeked is the last pushed."),
                 () -> assertEquals(3, tsThree.size(), "After a peek the size remains the same.")
