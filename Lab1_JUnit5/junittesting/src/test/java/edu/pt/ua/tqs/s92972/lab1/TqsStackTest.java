@@ -27,48 +27,48 @@ class TqsStackTest {
 
     @org.junit.jupiter.api.Test
     void constructor() {
-        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(-1), "The stack bound must be a natural number!");
-        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(0), "The stack bound must be a natural number!");
+        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(-1), "contructor: Bound with negative number did not throw error");
+        assertThrows(IllegalArgumentException.class, () -> new TqsStack<String>(0), "contructor: Bound with value zero did not throw error");
     }
 
     @org.junit.jupiter.api.Test
     void push() {
-        assertThrows(IllegalStateException.class, () -> tsThree.push("Four"), "For bounded stacks only, pushing onto a full stack throw an IllegalStateException.;");
-        assertDoesNotThrow(() -> tsEmpty.push("Four"), "For bounded stacks only, pushing onto a full stack throw an IllegalStateException.;");
+        assertThrows(IllegalStateException.class, () -> tsThree.push("Four"), "push: Pushing an elemento to a full stack did not throw an IllegalStateException.;");
+        assertDoesNotThrow(() -> tsEmpty.push("Four"), "push: Pushing onto non bounded stack throwed an IllegalStateException.;");
     }
 
     @org.junit.jupiter.api.Test
     void pop() {
-        assertEquals("Three", tsThree.pop(), "The element popped is the last pushed.");
+        assertEquals("Three", tsThree.pop(), "pop: The element popped is not the last pushed.");
 
         tsThree.pop();
         tsThree.pop();
-        assertEquals(0, tsThree.size(), "After n pops at a stack with n elements, its size will be 0.");
+        assertEquals(0, tsThree.size(), "pop: After n pops at a stack with n elements, its size is not 0.");
 
-        assertThrows(NoSuchElementException.class, () -> tsThree.pop(), "Popping from an empty stack throw a NoSuchElementException.");
+        assertThrows(NoSuchElementException.class, () -> tsThree.pop(), "pop: Popping from an empty stack did not throw a NoSuchElementException.");
     }
 
     @org.junit.jupiter.api.Test
     void peek() {
-        assertEquals("Three", tsThree.peek(), "The element popped is the last pushed.");
+        assertEquals("Three", tsThree.peek(), "peek: The element popped is not the last pushed.");
         assertAll(
-                () -> assertEquals("Three", tsThree.peek(), "The element peeked is the last pushed."),
-                () -> assertEquals(3, tsThree.size(), "After a peek the size remains the same.")
+                () -> assertEquals("Three", tsThree.peek(), "peek: The element peeked is not the last pushed."),
+                () -> assertEquals(3, tsThree.size(), "peek: After a peek the size changed.")
         );
 
-        assertDoesNotThrow(() -> tsThree.peek(), "Peeking from an empty stack does not throw a NoSuchElementException.");
+        assertDoesNotThrow(() -> tsThree.peek(), "peek: Peeking from an empty stack throws a NoSuchElementException.");
 
     }
 
     @org.junit.jupiter.api.Test
     void size() {
-        assertEquals(0, tsEmpty.size(), "A stack has size 0 on construction.");
-        assertEquals(3, tsThree.size(), "Stack of size n has n elements.");
+        assertEquals(0, tsEmpty.size(), "size: On construction, a stack does not have size 0.");
+        assertEquals(3, tsThree.size(), "size: A stack with n elements does not have size n.");
     }
 
     @org.junit.jupiter.api.Test
     void isEmpty() {
-        assertTrue(tsEmpty.isEmpty(), "A stack is empty on construction.");
-        assertFalse(tsThree.isEmpty(), "Stack of size n (n>0) is not empty.");
+        assertTrue(tsEmpty.isEmpty(), "isEmpty: A stack is not empty on construction.");
+        assertFalse(tsThree.isEmpty(), "isEmpty: A stack with n elements (n>0) is empty.");
     }
 }
