@@ -4,6 +4,8 @@ Guiões práticos.
 
 
 
+**Aluno** Gonçalo Matos, 92972
+
 **Unidade Curricular** [**Teste e Qualidade de Software**](https://www.ua.pt/pt/uc/8109)
 
 **Docente** [Ilídio Oliveira](https://www.ua.pt/pt/p/10318398)
