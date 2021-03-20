@@ -22,6 +22,7 @@ class TqsStackTest {
 
     @org.junit.jupiter.api.AfterEach
     void tearDown() {
+        tsEmpty = tsThree = null;
     }
 
     @org.junit.jupiter.api.Test
