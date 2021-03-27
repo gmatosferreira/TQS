@@ -9,6 +9,9 @@ import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import static org.mockito.Mockito.when;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+
 @ExtendWith(MockitoExtension.class)
 class StocksPortfolioTest {
 
@@ -31,8 +34,10 @@ class StocksPortfolioTest {
 
         // Verify  getValue
         assertEquals(65.8, this.portfolio.getTotalValue(), "getTotalValue: Value does not match expected");
+        assertThat(this.portfolio.getTotalValue(), is(65.8));
 
         this.portfolio.addStock(new Stock("Corticeira Amorim", 50));
         assertEquals(572.8, this.portfolio.getTotalValue(), "getTotalValue: Value does not match expected");
+        assertThat(this.portfolio.getTotalValue(), is(572.8));
     }
 }
