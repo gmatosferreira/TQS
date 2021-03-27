@@ -6,7 +6,48 @@ O JUnit é uma framework de testes em unidade open-source para código Java.
 
 ## Configuração em Maven
 
+>  Para criar um projeto Maven.
+>
+> ```bash
+> $ mvn archetype:generate -DgroupId=edu.pt.ua.tqs.lab2.s92972 -DartifactId=stock -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
+> 
+> # To test
+> $ cd ./<projFolder>m
+> $ mvn package
+> $ java -cp target/<fileName>.jar <DgroupId>.App
+> ```
+
+
+
 Podem ser adicionadas as dependências manualmente ao `pom.xml`. Ver mais [aqui](https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven).
+
+```xml
+<properties>
+    <junit-jupiter.version>5.7.1</junit-jupiter.version>
+</properties>
+
+<dependencies>
+    <!-- junit 5 -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>${junit-jupiter.version}</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+```
 
 Em alternativa, através do **IntelliJ**, carregar sobre a classe para a qual queremos criar os testes e manter o rato, até aparecer a lâmpada das sugestões. Nas sugestões carregar em <u>Create test</u> e selecionar.
 
@@ -19,6 +60,12 @@ Em alternativa, através do **IntelliJ**, carregar sobre a classe para a qual qu
 > Vai aparecer um aviso de que as dependências não estão configuradas. Carregar no botão para resolver. O aviso não desaparece, mas as dependências são adicionadas.
 
 > A classe sobre a qual vão ser criados os testes já deve ter o esqueleto dos métodos definido, de forma a ser feito um mapeamento automático na classe de testes. No entanto, este métodos não devem ter qualquer funcionalidade, apenas um retorno (se necessário) por defeito para que o código possa ser compilado sem erros, de forma a cumprir a boa prática de <u>implementar os testes antes das funções que os implementam</u>, de forma a desenvolver código mais eficiente.
+
+
+
+### Execução dos testes
+
+Para **executar** os testes no IntelliJ ir ao menu Maven (lateral direita) > Lifecycle > Tests.
 
 
 
@@ -139,3 +186,35 @@ Para analisar a abrangência dos testes pode recorrer-se à ferramenta [JaCoCo](
 
 > A versão do tutorial gera os relatórios de cobertura mas com erros (todos os elementos com cobertura 0/100, quando há testes definidos). Corrigi para a versão 0.8.5 e funcionou.
 
+
+
+
+
+## Hamlet
+
+> [Documentação](http://hamcrest.org/JavaHamcrest/tutorial) e [Guia Baeldung](https://www.baeldung.com/java-junit-hamcrest-guide)
+
+O Hamlet é uma framework que permite a escrita de testes unitários em várias linguagens de programação, entre as quais Java. Permite a escrita de testes unitários e facilmente mais legíveis para o programador.
+
+Para ser integrado num projeto Maven, basta adicionar as seguintes dependências.
+
+```xml
+<dependency>
+    <groupId>org.hamcrest</groupId>
+    <artifactId>hamcrest-all</artifactId>
+    <version>1.3</version>
+</dependency>
+```
+
+Depois pode ser utilizado em conjunto com o JUnit. Para os testes são providenciados vários métodos **matchers**.
+
+> [Documentação](http://hamcrest.org/JavaHamcrest/javadoc/2.2/org/hamcrest/Matchers.html)
+
+```java
+@org.junit.jupiter.api.Test
+public void myTest() {
+	String a = "foo";
+    String b = "FOO";
+    assertThat(a, equalToIgnoringCase(b));    
+}
+```
