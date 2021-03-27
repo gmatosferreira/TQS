@@ -47,5 +47,13 @@ class AddressResolverTest {
     @Test
     public void whenBadCoordidates_throwBadArrayindex() throws IOException, URISyntaxException, ParseException {
 
+        // Mock stubbing
+        when(httpClient.get("http://open.mapquestapi.com/geocoding/v1/reverse?key=uXSAVwYWbf9tJmsjEGHKKAo0gOjZfBLQ&location=12328463876424.000000%2C-2387235278326378000000.000000&includeRoadMetadata=true")).thenReturn(
+                "{\"info\":{\"statuscode\":0,\"copyright\":{\"text\":\"\\u00A9 2021 MapQuest, Inc.\",\"imageUrl\":\"http://api.mqcdn.com/res/mqlogo.gif\",\"imageAltText\":\"\\u00A9 2021 MapQuest, Inc.\"},\"messages\":[]},\"options\":{\"maxResults\":1,\"thumbMaps\":true,\"ignoreLatLngInput\":false},\"results\":[{\"providedLocation\":{\"latLng\":{\"lat\":1.2328463876424E13,\"lng\":-2.387235278326378E21}},\"locations\":[]}]}"
+        );
+
+        // Test
+        assertThrows(IndexOutOfBoundsException.class, () -> resolver.findAddressForLocation(12328463876424.0, -2387235278326378263823.82));
+
     }
 }

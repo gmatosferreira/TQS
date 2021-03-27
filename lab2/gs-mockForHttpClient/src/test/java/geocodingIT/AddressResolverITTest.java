@@ -39,5 +39,8 @@ class AddressResolverITTest {
     @Test
     public void whenBadCoordidates_throwBadArrayindex() throws IOException, URISyntaxException, ParseException {
 
+        // Test
+        assertThrows(IndexOutOfBoundsException.class, () -> resolver.findAddressForLocation(12328463876424.0, -2387235278326378263823.82));
+
     }
 }
