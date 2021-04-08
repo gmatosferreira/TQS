@@ -12,9 +12,9 @@ O JUnit é uma framework de testes em unidade open-source para código Java.
 > $ mvn archetype:generate -DgroupId=edu.pt.ua.tqs.lab2.s92972 -DartifactId=stock -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
 > 
 > # To test
-> $ cd ./<projFolder>m
+> $ cd ./<projFolder>
 > $ mvn package
-> $ java -cp target/<fileName>.jar <DgroupId>.App
+> $ java -cp target/<fileName>.jar edu.pt.ua.tqs.lab2.s92972.App
 > ```
 
 
