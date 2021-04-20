@@ -1,8 +1,9 @@
 package edu.pt.ua.tqs.lab5.s92972;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.an.Dada;
+import io.cucumber.java.it.Quando;
+import io.cucumber.java.pt.Entao;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,28 +12,28 @@ public class CalculatorSteps {
     private Calculator c;
 
     // Pre-conditions
-    @Given("a calculator I just turned on")
+    @Dada("uma calculadora que acabei de ligar")
     public void setup() {
         c = new Calculator();
     }
 
     // Events or Actions
-    @When("I add {int} and {int}")
-    public void i_add_and(Integer int1, Integer int2) {
+    @Quando("eu adiciono {int} e {int}")
+    public void adiciono(Integer int1, Integer int2) {
         c.push(int1);
         c.push(int2);
         c.push("+");
     }
 
-    @When("I substract {int} to {int}")
-    public void i_substract_to(Integer int1, Integer int2) {
-        c.push(int1);
+    @Quando("eu subtraio {int} a {int}")
+    public void subtraio(Integer int1, Integer int2) {
         c.push(int2);
+        c.push(int1);
         c.push("-");
     }
 
     // Expected outcomes (test)
-    @Then("the result is {float}")
+    @Entao("o resultado é {float}")
     public void the_result_is(Float float1) {
         assertEquals(Double.parseDouble(float1.toString()), c.value());
     }
