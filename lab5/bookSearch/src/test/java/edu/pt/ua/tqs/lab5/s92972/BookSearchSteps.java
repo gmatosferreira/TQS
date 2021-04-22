@@ -29,9 +29,9 @@ public class BookSearchSteps {
      */
 
     @ParameterType(".*")
-    public Date iso8601Date(String date){
+    public Date iso8601Date(String date) {
         String[] d = date.split("-");
-        LocalDateTime ldt = LocalDateTime.of(Integer.parseInt(d[0]), Integer.parseInt(d[1]), Integer.parseInt(d[2]),0, 0);
+        LocalDateTime ldt = LocalDateTime.of(Integer.parseInt(d[0]), Integer.parseInt(d[1]), Integer.parseInt(d[2]), 0, 0);
         // Convert to Date
         return Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
     }
@@ -55,6 +55,21 @@ public class BookSearchSteps {
         searchResults = library.findBooks(date1, date2);
     }
 
+    @When("the customer searches for books by author {string}")
+    public void the_customer_searches_for_books_by_author(String string) {
+        searchResults = library.findBooksByAuthor(string);
+    }
+
+    @When("the customer searches for books by title {string}")
+    public void the_customer_searches_for_books_by_title(String string) {
+        searchResults = library.findBooksByTitle(string);
+    }
+
+    @When("the customer searches for any book")
+    public void the_customer_searches_for_any_book() {
+        searchResults = library.findBooks();
+    }
+
     // Expected output
     @Then("{int} books should have been found")
     public void books_should_have_been_found(Integer int1) {
@@ -63,6 +78,6 @@ public class BookSearchSteps {
 
     @Then("Book {int} should have the title {string}")
     public void book_should_have_the_title(Integer int1, String string) {
-        assertEquals(searchResults.get(int1-1).getTitle(), string, "Error: Book title does not match expected!");
+        assertEquals(searchResults.get(int1 - 1).getTitle(), string, "Error: Book title does not match expected!");
     }
 }
