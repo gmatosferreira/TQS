@@ -75,10 +75,10 @@ public class SetOfNaturalsTest {
 
     @Test
     public void testEquals() {
-        assertFalse(setA.equals(setB), "equals: different sets reported as equal");
+        assertNotEquals(setA, setB, "equals: different sets reported as equal");
 
         setA.add(new int[]{10, 20, 30, 40, 50, 60});
-        assertTrue(setA.equals(setB), "equals: equal sets reported as different");
+        assertEquals(setA, setB, "equals: equal sets reported as different");
 
     }
 
