@@ -11,13 +11,15 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase
+// @TestPropertySource( locations = "application-integrationtest.properties") // USe a real database
+@AutoConfigureTestDatabase // Use in memory database
 class CarRestControllerTemplateIT {
 
     @LocalServerPort
