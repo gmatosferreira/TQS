@@ -190,11 +190,11 @@ Para analisar a abrangência dos testes pode recorrer-se à ferramenta [JaCoCo](
 
 
 
-## Hamlet
+## Hamcrest
 
 > [Documentação](http://hamcrest.org/JavaHamcrest/tutorial) e [Guia Baeldung](https://www.baeldung.com/java-junit-hamcrest-guide)
 
-O Hamlet é uma framework que permite a escrita de testes unitários em várias linguagens de programação, entre as quais Java. Permite a escrita de testes unitários e facilmente mais legíveis para o programador.
+O Hamcrest é uma framework que permite a escrita de testes unitários em várias linguagens de programação, entre as quais Java. Permite a escrita de testes unitários e facilmente mais legíveis para o programador.
 
 Para ser integrado num projeto Maven, basta adicionar as seguintes dependências.
 
