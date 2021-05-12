@@ -19,8 +19,13 @@ public class Car {
     public Car() {
     }
 
-    public Car(Long carId, String maker, String model) {
-        this.id = carId;
+    public Car(Long id, String maker, String model) {
+        this.id = id;
+        this.maker = maker;
+        this.model = model;
+    }
+
+    public Car(String maker, String model) {
         this.maker = maker;
         this.model = model;
     }

@@ -39,7 +39,7 @@ class CarRestControllerTemplateIT {
     @Test
     public void whenValidInput_thenCreateCar() {
         // Create entity through controller
-        Car c1 = new Car(123L, "BMW", "i3");
+        Car c1 = new Car("BMW", "i3");
         ResponseEntity<Car> response = restTemplate.postForEntity("/api/cars", c1, Car.class);
         // Validate response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -54,8 +54,8 @@ class CarRestControllerTemplateIT {
     @Test
     public void givenCars_whenGetCars_thenStatus200()  {
         // Save cars to db through repository
-        carRepository.saveAndFlush(new Car(123L, "BMW", "i3"));
-        carRepository.saveAndFlush(new Car(124L, "Renault", "Zoe"));
+        carRepository.saveAndFlush(new Car("BMW", "i3"));
+        carRepository.saveAndFlush(new Car("Renault", "Zoe"));
 
         // Call controller to get cars
         ResponseEntity<List<Car>> response = restTemplate.exchange("/api/cars", HttpMethod.GET, null, new ParameterizedTypeReference<List<Car>>() {});

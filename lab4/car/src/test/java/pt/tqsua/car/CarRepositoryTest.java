@@ -22,7 +22,7 @@ public class CarRepositoryTest {
     @Test
     public void findByIdTest() {
         // Create object and persist on the db
-        Car c1 = new Car(123L, "BMW", "i3");
+        Car c1 = new Car("BMW", "i3");
         c1 = entityManager.persistAndFlush(c1); //ensure data is persisted at this point
 
         // Call repository
