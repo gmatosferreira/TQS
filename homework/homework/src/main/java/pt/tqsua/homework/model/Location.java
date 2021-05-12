@@ -1,14 +1,19 @@
 package pt.tqsua.homework.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Location {
 
-    @Id
+    @JsonProperty("globalIdLocal")
     private Integer id;
+    @JsonProperty("idAreaAviso")
     private String idArea;
+    @JsonProperty("local")
     private String name;
     private String latitude;
     private String longitude;
@@ -61,5 +66,16 @@ public class Location {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", idArea='" + idArea + '\'' +
+                ", name='" + name + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                '}';
     }
 }
