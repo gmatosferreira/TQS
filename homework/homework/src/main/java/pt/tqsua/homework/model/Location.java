@@ -9,11 +9,8 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Location {
 
-    @JsonProperty("globalIdLocal")
     private Integer id;
-    @JsonProperty("idAreaAviso")
     private String idArea;
-    @JsonProperty("local")
     private String name;
     private String latitude;
     private String longitude;
@@ -28,26 +25,32 @@ public class Location {
         this.longitude = longitude;
     }
 
+    @JsonProperty("id")
     public Integer getId() {
         return id;
     }
 
+    @JsonProperty("globalIdLocal")
     public void setId(Integer id) {
         this.id = id;
     }
 
+    @JsonProperty("idArea")
     public String getIdArea() {
         return idArea;
     }
 
+    @JsonProperty("idAreaAviso")
     public void setIdArea(String idArea) {
         this.idArea = idArea;
     }
 
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
+    @JsonProperty("local")
     public void setName(String name) {
         this.name = name;
     }
