@@ -3,7 +3,6 @@ package pt.tqsua.homework.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import pt.tqsua.homework.HomeworkApplication;
 import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.model.LocationsList;
 
@@ -19,7 +18,7 @@ public class LocationService {
     // https://spring.io/guides/gs/consuming-rest/
     // https://gist.github.com/RealDeanZhao/38821bc1efeb7e2a9bcd554cc06cdf96
     @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
 
     public List<Location> getAllLocations() {
         // Call API
@@ -38,7 +37,8 @@ public class LocationService {
     public Optional<Location> getLocationDetails(Integer locationId) {
         // Call API
         LocationsList locationList = restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
-        List<Location> location = locationList.getLocations().stream().filter(l -> l.getId()==locationId).collect(Collectors.toList());
+        List<Location> location = locationList.getLocations().stream().filter(l -> l.getId().equals(locationId)).collect(Collectors.toList());
+        System.out.println(String.format("Filtering %d locations for ID %d and got %d matches.", locationList.getLocations().size(), locationId, location.size()));
         return location.size()==1 ? Optional.of(location.get(0)) : Optional.empty();
     }
 
