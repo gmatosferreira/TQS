@@ -40,7 +40,7 @@ public class LocationServiceWithMockAPIUnitTest {
             Location l4 = new Location(4, "STR", "Santarém", "5.698", "-5.869");
 
             // Mock real API
-            when(restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3)));
+            when(restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3,l4)));
         }
 
         @Test
@@ -92,7 +92,7 @@ public class LocationServiceWithMockAPIUnitTest {
 
             // Test response
             assertThat(location.isEmpty()).isFalse();
-            assertThat(location.get().getName()).isEqualTo("Santarém");
+            assertThat(location.get().getName()).isEqualTo("Aveiro");
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
