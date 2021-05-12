@@ -28,7 +28,8 @@ public class LocationController {
     }
 
     @GetMapping("/locations/search/{nameMatch}")
-    public List<Location> getLocationByNameMatch(@PathVariable @NotNull String nameMatch) {
+    public List<Location> getLocationByNameMatch(@PathVariable String nameMatch) {
+        System.out.println(String.format("GET Search by %s", nameMatch));
         return locationService.getLocationsByNameMatch(nameMatch);
     }
 

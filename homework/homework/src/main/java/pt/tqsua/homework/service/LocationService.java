@@ -31,7 +31,10 @@ public class LocationService {
     public List<Location> getLocationsByNameMatch(String nameMatch) {
         // Call API
         LocationsList locationList = restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
-        return locationList.getLocations().stream().filter(l -> l.getName().contains(nameMatch)).collect(Collectors.toList());
+        List<Location> location = locationList.getLocations().stream().filter(l -> l.getName().toLowerCase().contains(nameMatch.toLowerCase())).collect(Collectors.toList());
+        System.out.println(String.format("Filtering %d locations for name %s and got %d matches.", locationList.getLocations().size(), nameMatch, location.size()));
+        System.out.println(location.size()>0 ? location.get(0) : "NOT FOUND");
+        return location;
     }
 
     public Optional<Location> getLocationDetails(Integer locationId) {
