@@ -39,6 +39,7 @@ public class LocationService {
         LocationsList locationList = restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
         List<Location> location = locationList.getLocations().stream().filter(l -> l.getId().equals(locationId)).collect(Collectors.toList());
         System.out.println(String.format("Filtering %d locations for ID %d and got %d matches.", locationList.getLocations().size(), locationId, location.size()));
+        System.out.println(location.size()>0 ? location.get(0) : "NOT FOUND");
         return location.size()==1 ? Optional.of(location.get(0)) : Optional.empty();
     }
 

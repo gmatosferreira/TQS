@@ -35,6 +35,11 @@ public class Location {
         this.id = id;
     }
 
+    @JsonProperty("id")
+    public void setId2(Integer id) {
+        this.id = id;
+    }
+
     @JsonProperty("idArea")
     public String getIdArea() {
         return idArea;
@@ -45,6 +50,11 @@ public class Location {
         this.idArea = idArea;
     }
 
+    @JsonProperty("idArea")
+    public void setIdArea2(String idArea) {
+        this.idArea = idArea;
+    }
+
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -52,6 +62,11 @@ public class Location {
 
     @JsonProperty("local")
     public void setName(String name) {
+        this.name = name;
+    }
+
+    @JsonProperty("name")
+    public void setName2(String name) {
         this.name = name;
     }
 
