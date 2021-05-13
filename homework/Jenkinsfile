@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    tools {
+        jdk 'JDK11'
+        maven 'Maven3'
+    }
+    stages {
+        stage('Install') {
+            steps {
+                dir('homework') {
+                    sh "mvn clean install"
+                }
+            }
+        post {
+            always {
+                junit 'homework/**/target/*-reports/TEST-*.xml'
+            }
+        }
+    }
+    }
+}
