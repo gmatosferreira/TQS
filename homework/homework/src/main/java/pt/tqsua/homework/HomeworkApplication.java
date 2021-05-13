@@ -19,6 +19,7 @@ public class HomeworkApplication {
 	private static final Logger log = LoggerFactory.getLogger(HomeworkApplication.class);
 
 	public static void main(String[] args) {
+		System.out.println("Testing Jenkins pipeline integration...");
 		SpringApplication.run(HomeworkApplication.class, args);
 	}
 
