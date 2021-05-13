@@ -100,11 +100,12 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void validateStats() {
+        public void validateStats() throws Exception {
             // validate initial value
             assertThat(this.cache.getHits(), is(0));
             assertThat(this.cache.getMisses(), is(0));
             assertThat(this.cache.getSize(), is(2));
+            assertThat(this.cache.getExpired(), is(0));
 
             // make operations to change their value
             this.cache.get(exKey);
@@ -117,6 +118,12 @@ public class CacheUnitTest {
             assertThat(this.cache.getHits(), is(3));
             assertThat(this.cache.getMisses(), is(2));
             assertThat(this.cache.getSize(), is(2));
+            assertThat(this.cache.getExpired(), is(0));
+
+            // wait for TTL to exceed
+            TimeUnit.SECONDS.sleep(exTTL+1);
+            assertThat(this.cache.getExpired(), is(1));
+
         }
 
     }

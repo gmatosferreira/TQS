@@ -7,8 +7,10 @@ public class Cache<T> implements IGenericCache<String, T>{
     private Map<String, CacheEntry<T>> entries;
     private int hits;
     private int misses;
+    private int expired;
 
     public Cache() {
+        System.out.println("\n\nNEW CACHE\n\n");
         this.entries = new HashMap<>();
     }
 
@@ -30,6 +32,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         List<String> expired = this.getExpiredKeys();
         for(String key:expired) {
             this.entries.remove(key);
+            this.expired += 1;
         }
         return expired.size();
     };
@@ -41,6 +44,7 @@ public class Cache<T> implements IGenericCache<String, T>{
      */
     public boolean containsKey(String key) {
         this.clean();
+        this.misses += !entries.containsKey(key) ? 1 : 0;
         return entries.containsKey(key);
     };
 
@@ -54,6 +58,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         Optional<T> entry = entries.containsKey(key) ? Optional.of(entries.get(key).getValue()) : Optional.empty();
         this.hits += entry.isPresent() ? 1 : 0;
         this.misses += entry.isEmpty() ? 1 : 0;
+        System.out.println(String.format("Get from cache with %d hits and %d misses", this.hits, this.misses));
         return entry;
     };
 
@@ -108,6 +113,12 @@ public class Cache<T> implements IGenericCache<String, T>{
     }
 
     public int getSize() {
+        this.clean();
         return this.entries.size();
+    }
+
+    public int getExpired() {
+        this.clean();
+        return this.expired;
     }
 }
