@@ -43,16 +43,16 @@ public class WarningService {
 
     private List<Warning> getWarnings() {
         // Check if cache has locations
-        if(cache.containsKey(API_URL)) {
+        if(cache.containsKey(WarningService.API_URL)) {
             System.out.println("Cache has it, getting...");
-            return cache.get(API_URL).get();
+            return cache.get(WarningService.API_URL).get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
-        Warning[] response = restTemplate.getForObject(API_URL, Warning[].class);
+        Warning[] response = restTemplate.getForObject(WarningService.API_URL, Warning[].class);
         List<Warning> warnings = response.length>0 ? Arrays.asList(response).stream().filter(w -> w.getLevel()!= AwarenessLevel.green).collect(Collectors.toList()) : Arrays.asList();
         // Save to cache
-        this.cache.put(API_URL, warnings);
+        this.cache.put(WarningService.API_URL, warnings);
         return warnings;
     }
 

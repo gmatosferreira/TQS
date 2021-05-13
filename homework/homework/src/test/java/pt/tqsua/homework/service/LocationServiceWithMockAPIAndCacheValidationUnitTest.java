@@ -43,7 +43,7 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
             Location l4 = new Location(4, "STR", "Santarém", "5.698", "-5.869");
 
             // Mock real API
-            when(restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3,l4)));
+            when(restTemplate.getForObject(LocationService.API_URL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3,l4)));
         }
 
         @Test
@@ -166,7 +166,7 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         @BeforeEach
         public void setUp() {
             // Mock real API
-            when(restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class)).thenReturn(new LocationsList(Arrays.asList()));
+            when(restTemplate.getForObject(LocationService.API_URL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList()));
         }
 
         @Test
