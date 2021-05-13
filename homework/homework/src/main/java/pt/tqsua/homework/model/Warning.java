@@ -39,6 +39,11 @@ public class Warning {
         this.name = name;
     }
 
+    @JsonProperty("name")
+    public void setName2(String name) {
+        this.name = name;
+    }
+
     public String getText() {
         return text;
     }
@@ -57,6 +62,11 @@ public class Warning {
         this.level = level;
     }
 
+    @JsonProperty("level")
+    public void setLevel2(AwarenessLevel level) {
+        this.level = level;
+    }
+
     @JsonProperty("start")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public LocalDateTime getStart() {
@@ -66,6 +76,12 @@ public class Warning {
     @JsonProperty("startTime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    @JsonProperty("start")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    public void setStart2(LocalDateTime start) {
         this.start = start;
     }
 
@@ -81,6 +97,12 @@ public class Warning {
         this.end = end;
     }
 
+    @JsonProperty("end")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    public void setEnd2(LocalDateTime end) {
+        this.end = end;
+    }
+
     @JsonProperty("location")
     public String getLocation() {
         return location;
@@ -88,6 +110,11 @@ public class Warning {
 
     @JsonProperty("idAreaAviso")
     public void setLocation(String location) {
+        this.location = location;
+    }
+
+    @JsonProperty("location")
+    public void setLocation2(String location) {
         this.location = location;
     }
 
