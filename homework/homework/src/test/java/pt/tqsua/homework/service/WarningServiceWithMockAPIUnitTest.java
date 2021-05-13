@@ -14,6 +14,8 @@ import pt.tqsua.homework.model.LocationsList;
 import pt.tqsua.homework.model.Warning;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -37,8 +39,8 @@ public class WarningServiceWithMockAPIUnitTest {
         public void setUp() {
             // Create objects
             Warning[] ws = new Warning[2];
-            ws[0] = new Warning("Agitação Marítima", "Ondas altas", new Date(1546344000000L), new Date(1546516800000L), AwarenessLevel.red, "BGC");
-            ws[1] = new Warning("Nevoeiro", "Ondas altas", new Date(1546344000000L), new Date(1546516800000L), AwarenessLevel.orange, "AVR");
+            ws[0] = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.red, "BGC");
+            ws[1] = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.orange, "AVR");
 
             // Mock real API
             when(restTemplate.getForObject(WarningService.API_URL, Warning[].class)).thenReturn(ws);

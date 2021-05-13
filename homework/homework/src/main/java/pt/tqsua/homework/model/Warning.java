@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -12,14 +13,14 @@ public class Warning {
 
     private String name;
     private String text;
-    private Date start;
-    private Date end;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private AwarenessLevel level;
     private String location;
 
     public Warning() {}
 
-    public Warning(String name, String text, Date start, Date end, AwarenessLevel level, String location) {
+    public Warning(String name, String text, LocalDateTime start, LocalDateTime end, AwarenessLevel level, String location) {
         this.name = name;
         this.text = text;
         this.start = start;
@@ -58,25 +59,25 @@ public class Warning {
 
     @JsonProperty("start")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    public Date getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
     @JsonProperty("startTime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    public void setStart(Date start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
     @JsonProperty("end")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    public Date getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
     @JsonProperty("endTime")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    public void setEnd(Date end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
