@@ -4,6 +4,8 @@ import java.time.Instant;
 
 public class CacheEntry<T> {
 
+    public static final int DEFAULTTTL = 5;
+
     private Instant created;
     private int ttl;
     private T value;
@@ -16,7 +18,7 @@ public class CacheEntry<T> {
 
     public CacheEntry(T value) {
         // Default ttl of 30 seconds
-        this(value, 30);
+        this(value, DEFAULTTTL);
     }
 
     public boolean expired() {

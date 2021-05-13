@@ -4,6 +4,8 @@ import java.util.*;
 
 public class Cache<T> implements IGenericCache<String, T>{
 
+    public static final int DEFAULTTTL = CacheEntry.DEFAULTTTL;
+
     private Map<String, CacheEntry<T>> entries;
     private int hits;
     private int misses;

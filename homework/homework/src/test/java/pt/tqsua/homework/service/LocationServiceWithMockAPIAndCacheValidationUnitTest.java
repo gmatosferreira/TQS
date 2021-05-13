@@ -8,6 +8,8 @@ import org.mockito.*;
 import org.mockito.internal.verification.VerificationModeFactory;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
+import pt.tqsua.homework.cache.Cache;
+import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.model.LocationsList;
 
@@ -16,11 +18,12 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceWithMockAPIUnitTest {
+public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
 
     @Mock(lenient = true)
     private RestTemplate restTemplate;
@@ -46,13 +49,14 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetAll_thenReturnList() {
             // Call service
-            List<Location> locations = locationService.getAllLocations();
+            Entity<List<Location>> locations = locationService.getAllLocations();
 
             // Test response
-            assertThat(locations)
+            assertThat(locations.getData())
                     .hasSize(4)
                     .extracting(Location::getName)
                     .containsExactly("Aveiro", "Braga", "Bragança", "Santarém");
+            assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
@@ -61,13 +65,14 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetByExistentName_thenReturnMatch() {
             // Call service
-            List<Location> locations = locationService.getLocationsByNameMatch("Brag");
+            Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Brag");
 
             // Test response
-            assertThat(locations)
+            assertThat(locations.getData())
                     .hasSize(2)
                     .extracting(Location::getName)
                     .containsExactly("Braga", "Bragança");
+            assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
@@ -76,10 +81,11 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetByNonExistentName_thenReturnMatch() {
             // Call service
-            List<Location> locations = locationService.getLocationsByNameMatch("Port");
+            Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Port");
 
             // Test response
-            assertThat(locations).hasSize(0);
+            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
@@ -88,14 +94,68 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetDetails_returnObject() {
             // Call service
-            Optional<Location> location = locationService.getLocationDetails(1);
+            Entity<Optional<Location>> location = locationService.getLocationDetails(1);
 
             // Test response
-            assertThat(location.isEmpty()).isFalse();
-            assertThat(location.get().getName()).isEqualTo("Aveiro");
+            assertThat(location.getData().isEmpty()).isFalse();
+            assertThat(location.getData().get().getName()).isEqualTo("Aveiro");
+            assertThat(location.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
+        }
+
+        @Test
+        public void whenNotCache_getFromAPI() {
+            // Call service
+            Entity<List<Location>> locations = locationService.getAllLocations();
+
+            // Test response
+            assertThat(locations.getCacheHits()).isEqualTo(0);
+            assertThat(locations.getCacheMisses()).isEqualTo(1);
+            assertThat(locations.getCacheSize()).isEqualTo(1);
+            assertThat(locations.getRequests()).isEqualTo(1);
+            assertThat(locations.getCacheExpired()).isEqualTo(0);
+
+            // Test RestTemplate usage
+            Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
+        }
+
+        @Test
+        public void whenCache_getFromCache() {
+            // Call service
+            Entity<List<Location>> locations = locationService.getAllLocations();
+            locations = locationService.getAllLocations();
+            locations = locationService.getAllLocations();
+
+            // Test response
+            assertThat(locations.getCacheHits()).isEqualTo(2);
+            assertThat(locations.getCacheMisses()).isEqualTo(1);
+            assertThat(locations.getCacheSize()).isEqualTo(1);
+            assertThat(locations.getRequests()).isEqualTo(3);
+            assertThat(locations.getCacheExpired()).isEqualTo(0);
+
+            // Test RestTemplate usage
+            Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
+        }
+
+        @Test
+        public void whenCacheExpired_getFromAPI() throws Exception {
+            // Call service
+            Entity<List<Location>> locations = locationService.getAllLocations();
+
+            // wait for TTL to exceed
+            TimeUnit.SECONDS.sleep(Cache.DEFAULTTTL+1);
+
+            // Call service again
+            locations = locationService.getAllLocations();
+
+            // Test response
+            assertThat(locations.getCacheHits()).isEqualTo(0);
+            assertThat(locations.getCacheMisses()).isEqualTo(2);
+            assertThat(locations.getCacheSize()).isEqualTo(1);
+            assertThat(locations.getRequests()).isEqualTo(2);
+            assertThat(locations.getCacheExpired()).isEqualTo(1);
         }
 
     }
@@ -112,10 +172,11 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetAll_thenReturnEmptyList() {
             // Call service
-            List<Location> locations = locationService.getAllLocations();
+            Entity<List<Location>> locations = locationService.getAllLocations();
 
             // Test response
-            assertThat(locations).hasSize(0);
+            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
@@ -124,10 +185,11 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetByName_thenReturnMatch() {
             // Call service
-            List<Location> locations = locationService.getLocationsByNameMatch("Brag");
+            Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Brag");
 
             // Test response
-            assertThat(locations).hasSize(0);
+            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
@@ -136,10 +198,11 @@ public class LocationServiceWithMockAPIUnitTest {
         @Test
         public void whenGetDetails_returnObject() {
             // Call service
-            Optional<Location> location = locationService.getLocationDetails(1);
+            Entity<Optional<Location>> location = locationService.getLocationDetails(1);
 
             // Test response
-            assertThat(location.isEmpty()).isTrue();
+            assertThat(location.getData().isEmpty()).isTrue();
+            assertThat(location.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);

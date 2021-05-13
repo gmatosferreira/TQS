@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.service.LocationService;
 
@@ -23,22 +24,22 @@ public class LocationController {
     private LocationService locationService;
 
     @GetMapping("/locations")
-    public List<Location> getAllLocations() {
+    public Entity<List<Location>> getAllLocations() {
         return locationService.getAllLocations();
     }
 
     @GetMapping("/locations/search/{nameMatch}")
-    public List<Location> getLocationByNameMatch(@PathVariable String nameMatch) {
+    public Entity<List<Location>> getLocationByNameMatch(@PathVariable String nameMatch) {
         System.out.println(String.format("GET Search by %s", nameMatch));
         return locationService.getLocationsByNameMatch(nameMatch);
     }
 
     @GetMapping("/locations/{locationId}")
-    public ResponseEntity<Location> getLocationById(@PathVariable @NotNull Integer locationId) {
-        Optional<Location> l = locationService.getLocationDetails(locationId);
-        Location location = l.isPresent() ? l.get() : null;
-        HttpStatus status = l.isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
-        return new ResponseEntity<>(location, status);
+    public ResponseEntity<Entity<Optional<Location>>> getLocationById(@PathVariable @NotNull Integer locationId) {
+        Entity<Optional<Location>> l = locationService.getLocationDetails(locationId);
+        Location location = l.getData().isPresent() ? l.getData().get() : null;
+        HttpStatus status = l.getData().isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(l, status);
     }
 
 }

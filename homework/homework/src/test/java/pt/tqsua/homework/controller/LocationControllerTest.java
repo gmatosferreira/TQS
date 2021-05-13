@@ -12,10 +12,13 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.service.LocationService;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -38,14 +41,14 @@ public class LocationControllerTest {
         Location l2 = new Location(2, "BJA", "Beja", "5.698", "-5.369");
 
         // Mock service
-        when(locationService.getAllLocations()).thenReturn(Arrays.asList(l1, l2));
+        when(locationService.getAllLocations()).thenReturn(new Entity<List<Location>>(Arrays.asList(l1, l2), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get("/api/locations").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(l1.getName())))
-                .andExpect(jsonPath("$[1].name", is(l2.getName())));
+                .andExpect(jsonPath("data", hasSize(2)))
+                .andExpect(jsonPath("data[0].name", is(l1.getName())))
+                .andExpect(jsonPath("data[1].name", is(l2.getName())));
 
         // Validate service usage
         verify(locationService, VerificationModeFactory.times(1)).getAllLocations();
@@ -54,12 +57,12 @@ public class LocationControllerTest {
     @Test
     public void notGivenLocations_whenGetLocations_thenReturnEmptyJsonArray() throws Exception {
         // Mock service
-        when(locationService.getAllLocations()).thenReturn(Arrays.asList());
+        when(locationService.getAllLocations()).thenReturn(new Entity<List<Location>>(Arrays.asList(), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get("/api/locations").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("data", hasSize(0)));
 
         // Validate service usage
         verify(locationService, VerificationModeFactory.times(1)).getAllLocations();
@@ -73,14 +76,14 @@ public class LocationControllerTest {
         Location l2 = new Location(2, "BGC", "Bragança", "5.698", "-5.369");
 
         // Mock service
-        when(locationService.getLocationsByNameMatch(nameMatch)).thenReturn(Arrays.asList(l1, l2));
+        when(locationService.getLocationsByNameMatch(nameMatch)).thenReturn(new Entity<List<Location>>(Arrays.asList(l1, l2), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get(String.format("/api/locations/search/%s", nameMatch)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(l1.getName())))
-                .andExpect(jsonPath("$[1].name", is(l2.getName())));
+                .andExpect(jsonPath("data", hasSize(2)))
+                .andExpect(jsonPath("data[0].name", is(l1.getName())))
+                .andExpect(jsonPath("data[1].name", is(l2.getName())));
 
         // Validate service usage
         verify(locationService, VerificationModeFactory.times(1)).getLocationsByNameMatch(nameMatch);
@@ -91,12 +94,12 @@ public class LocationControllerTest {
         String nameMatch = "Av";
 
         // Mock service
-        when(locationService.getLocationsByNameMatch(nameMatch)).thenReturn(Arrays.asList());
+        when(locationService.getLocationsByNameMatch(nameMatch)).thenReturn(new Entity<List<Location>>(Arrays.asList(), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get(String.format("/api/locations/search/%s", nameMatch)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)));
+                .andExpect(jsonPath("data", hasSize(0)));
 
         // Validate service usage
         verify(locationService, VerificationModeFactory.times(1)).getLocationsByNameMatch(nameMatch);
@@ -108,15 +111,15 @@ public class LocationControllerTest {
         Location l1 = new Location(1, "AVR", "Aveiro", "1.234", "5.678");
 
         // Mock service
-        when(locationService.getLocationDetails(l1.getId())).thenReturn(Optional.of(l1));
+        when(locationService.getLocationDetails(l1.getId())).thenReturn(new Entity<Optional<Location>>(Optional.of(l1), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get(String.format("/api/locations/%d", l1.getId())).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isFound())
-                .andExpect(jsonPath("$.name", is(l1.getName())))
-                .andExpect(jsonPath("$.idArea", is(l1.getIdArea())))
-                .andExpect(jsonPath("$.latitude", is(l1.getLatitude())))
-                .andExpect(jsonPath("$.longitude", is(l1.getLongitude())));
+                .andExpect(jsonPath("data.name", is(l1.getName())))
+                .andExpect(jsonPath("data.idArea", is(l1.getIdArea())))
+                .andExpect(jsonPath("data.latitude", is(l1.getLatitude())))
+                .andExpect(jsonPath("data.longitude", is(l1.getLongitude())));
 
         // Validate service usage
         verify(locationService, VerificationModeFactory.times(1)).getLocationDetails(l1.getId());
@@ -127,7 +130,7 @@ public class LocationControllerTest {
         int id = 1;
 
         // Mock service
-        when(locationService.getLocationDetails(id)).thenReturn(Optional.empty());
+        when(locationService.getLocationDetails(id)).thenReturn(new Entity<Optional<Location>>(Optional.empty(), 0, 1, 1, 0));
 
         // Make request to API and validate response
         mockMvc.perform(get(String.format("/api/locations/%d", id)).contentType(MediaType.APPLICATION_JSON))
