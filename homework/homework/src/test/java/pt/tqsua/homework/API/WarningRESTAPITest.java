@@ -17,6 +17,7 @@ import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.model.Warning;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,7 +43,7 @@ public class WarningRESTAPITest {
         if (response.getBody().getData().size()>0) {
             assertThat(response.getBody().getData())
                 .extracting(Warning::getLevel)
-                .contains(AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow);
+                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.green, AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
         }
         assertThat(response.getBody().getRequests()).isEqualTo(1);
         assertThat(response.getBody().getCacheHits()).isEqualTo(0);
@@ -62,7 +63,7 @@ public class WarningRESTAPITest {
         if (response.getBody().getData().size()>0) {
             assertThat(response.getBody().getData())
                 .extracting(Warning::getLevel)
-                .contains(AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow);
+                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.green, AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
             assertThat(response.getBody().getData())
                 .extracting(Warning::getLocation)
                 .containsOnly("AVR");

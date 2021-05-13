@@ -50,7 +50,7 @@ public class WarningService {
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
         Warning[] response = restTemplate.getForObject(WarningService.API_URL, Warning[].class);
-        List<Warning> warnings = response.length>0 ? Arrays.asList(response).stream().filter(w -> w.getLevel()!= AwarenessLevel.green).collect(Collectors.toList()) : Arrays.asList();
+        List<Warning> warnings = response.length>0 ? Arrays.asList(response) : Arrays.asList();
         // Save to cache
         this.cache.put(WarningService.API_URL, warnings);
         return warnings;
