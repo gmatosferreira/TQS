@@ -21,7 +21,6 @@ public class WarningService {
     @Autowired
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Autowired
     private Cache<List<Warning>> cache = new Cache<>();
 
     static String API_URL = "https://api.ipma.pt/open-data/forecast/warnings/warnings_www.json";

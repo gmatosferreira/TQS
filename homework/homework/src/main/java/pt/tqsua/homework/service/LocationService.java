@@ -22,7 +22,6 @@ public class LocationService {
     @Autowired
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Autowired
     private Cache<LocationsList> cache = new Cache<>();
 
     static String API_URL = "https://api.ipma.pt/open-data/distrits-islands.json";
@@ -58,15 +57,15 @@ public class LocationService {
 
     private LocationsList getLocations() {
         // Check if cache has locations
-        if(cache.containsKey(API_URL)) {
+        if(cache.containsKey(LocationService.API_URL)) {
             System.out.println("Cache has it, getting...");
-            return cache.get(API_URL).get();
+            return cache.get(LocationService.API_URL).get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
-        LocationsList locations = restTemplate.getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
+        LocationsList locations = restTemplate.getForObject(LocationService.API_URL, LocationsList.class);
         // Save to cache
-        this.cache.put(API_URL, locations);
+        this.cache.put(LocationService.API_URL, locations);
         return locations;
     }
 
