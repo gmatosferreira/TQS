@@ -7,13 +7,13 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                dir('homework') {
+                dir('homework/homework') {
                     sh "mvn clean install"
                 }
             }
         post {
             always {
-                junit 'homework/**/target/*-reports/TEST-*.xml'
+                junit 'homework/homework/**/target/*-reports/TEST-*.xml'
             }
         }
     }
