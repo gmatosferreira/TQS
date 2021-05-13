@@ -26,13 +26,13 @@ public class WarningController {
 
     @GetMapping("/warnings")
     public Entity<List<Warning>> getAllWarnings() {
-        return null;
+        return service.getAllWarnings();
     }
 
     @GetMapping("/warnings/{locationId}")
     public Entity<List<Warning>> getLocationByNameMatch(@PathVariable @NotNull String locationId) {
         System.out.println(String.format("GET Warnings search by %s", locationId));
-        return null;
+        return service.getLocationWarnings(locationId);
     }
 
 }
