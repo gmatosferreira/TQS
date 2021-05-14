@@ -40,7 +40,7 @@ public class Warning {
 
     @JsonProperty("name")
     public void setName2(String name) {
-        this.name = name;
+        this.setName(name);
     }
 
     public String getText() {
@@ -63,7 +63,7 @@ public class Warning {
 
     @JsonProperty("level")
     public void setLevel2(AwarenessLevel level) {
-        this.level = level;
+        this.setLevel(level);
     }
 
     @JsonProperty("start")
@@ -81,7 +81,7 @@ public class Warning {
     @JsonProperty("start")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public void setStart2(LocalDateTime start) {
-        this.start = start;
+        this.setStart(start);
     }
 
     @JsonProperty("end")
@@ -99,7 +99,7 @@ public class Warning {
     @JsonProperty("end")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     public void setEnd2(LocalDateTime end) {
-        this.end = end;
+        this.setEnd(end);
     }
 
     @JsonProperty("location")
@@ -114,7 +114,7 @@ public class Warning {
 
     @JsonProperty("location")
     public void setLocation2(String location) {
-        this.location = location;
+        this.setLocation(location);
     }
 
     @Override

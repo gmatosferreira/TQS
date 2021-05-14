@@ -34,7 +34,7 @@ public class Location {
 
     @JsonProperty("id")
     public void setId2(Integer id) {
-        this.id = id;
+        this.setId(id);
     }
 
     @JsonProperty("idArea")
@@ -49,7 +49,7 @@ public class Location {
 
     @JsonProperty("idArea")
     public void setIdArea2(String idArea) {
-        this.idArea = idArea;
+        this.setIdArea(idArea);
     }
 
     @JsonProperty("name")
@@ -64,7 +64,7 @@ public class Location {
 
     @JsonProperty("name")
     public void setName2(String name) {
-        this.name = name;
+        this.setName(name);
     }
 
     public String getLongitude() {

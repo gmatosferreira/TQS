@@ -44,7 +44,7 @@ public class UVIndex {
 
     @JsonProperty("location")
     public void setLocation2(int location) {
-        this.location = location;
+        this.setLocation(location);
     }
 
     @JsonProperty("intervaloHora")
@@ -86,7 +86,7 @@ public class UVIndex {
 
     @JsonProperty("date")
     public void setDate2(Date date) {
-        this.date = date;
+        this.setDate(date);
     }
 
     @JsonProperty("index")
