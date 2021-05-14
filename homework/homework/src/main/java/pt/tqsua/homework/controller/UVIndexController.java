@@ -23,17 +23,19 @@ public class UVIndexController {
 
     @GetMapping("/uvindexes")
     public Entity<List<UVIndex>> getAllIndexes() {
-        return null;
+        return service.getAllIndexes();
     }
 
     @GetMapping("/uvindexes/{locationId}")
     public Entity<List<UVIndex>> getIndexesByLocation(@PathVariable @NotNull int locationId) {
-        return null;
+        System.out.println(String.format("GET UVIndex for location %d", locationId));
+        return service.getLocationIndex(locationId);
     }
 
     @GetMapping("/uvindexes/{locationId}/{day}")
     public Entity<List<UVIndex>> getIndexesByLocation(@PathVariable @NotNull int locationId, @PathVariable @NotNull int day) {
-        return null;
+        System.out.println(String.format("GET UVIndex for location %d and day %d", locationId, day));
+        return service.getLocationIndexByDay(locationId, day);
     }
 
 }
