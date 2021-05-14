@@ -1,6 +1,6 @@
 package pt.tqsua.homework.controller;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
