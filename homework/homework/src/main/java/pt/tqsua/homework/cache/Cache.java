@@ -31,12 +31,12 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @return int number of entries removed
      */
     public int clean() {
-        List<String> expired = this.getExpiredKeys();
-        for(String key:expired) {
+        List<String> expiredKeys = this.getExpiredKeys();
+        for(String key:expiredKeys) {
             this.entries.remove(key);
             this.expired += 1;
         }
-        return expired.size();
+        return expiredKeys.size();
     };
 
     /**
