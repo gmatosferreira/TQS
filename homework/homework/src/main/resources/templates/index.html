@@ -47,6 +47,7 @@
                 <div class="card col-12 border-0 mb-5">
                     <div class="card-body">
                         <h5 class="card-title">Logs</h5>
+                        <p class="small">Running on port <span id="portNumber" th:text=${runningPort}>8080</span></p>
                         <div id="logs"></div>
                     </div>
                 </div>
@@ -155,206 +156,212 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.js"></script>
     <script>
-        // GLOBAL VARS
-        let locations = [];
-        let uvLocation = 0;
+        $(document).ready(function() {
 
-        // LOCATION
-        $('#location').selectize({
-            valueField: 'idArea',
-            labelField: 'name',
-            searchField: 'name',
-            options: [],
-            preload: true,
-            render: {
-                option: function (item, escape) {
-                    return `<div class="px-3 py-1">
-                        <span class="title">${escape(item.name)}</span>
-                    </div>`
+            const portNumber = $("#portNumber").text();
+            log("Making requests for port", portNumber);
+            
+            // GLOBAL VARS
+            let locations = [];
+            let uvLocation = 0;
+
+            // LOCATION
+            $('#location').selectize({
+                valueField: 'idArea',
+                labelField: 'name',
+                searchField: 'name',
+                options: [],
+                preload: true,
+                render: {
+                    option: function (item, escape) {
+                        return `<div class="px-3 py-1">
+                            <span class="title">${escape(item.name)}</span>
+                        </div>`
+                    }
+                },
+                load: function (query, callback) {
+                    log("API GET /api/location/search/ to filter by:", query);
+                    // Build API URL
+                    let url = `http://localhost:${portNumber}/api/locations/`;
+                    if (query.length) {
+                        url += "search/" + query;
+                    };
+                    // Call API
+                    fetch(url)
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            callback(data['data']);
+                            updateCacheStats("locationCacheStats", data);
+                            locations = data['data'];
+                        })
+                        .catch((err) => {
+                            log("ERROR calling API /api/locations:", err);
+                        });
+                    callback();
+                },
+                onChange: function (value) {
+                    getWarnings("");
+                    getUvIndex(0);
+                    if (!value) return;
+                    uvLocation = locations.filter(l => l['idArea']==value)[0]['id'];
+                    log("Location selected: ", value, "/", uvLocation);
+                    getWarnings(value);
+                    getUvIndex(uvLocation, 0);
                 }
-            },
-            load: function (query, callback) {
-                log("API GET /api/location/search/ to filter by:", query);
-                // Build API URL
-                let url = "http://localhost:8080/api/locations/";
-                if (query.length) {
-                    url += "search/" + query;
-                };
+            });
+
+            $("#uvDays").selectize({
+                onChange: function (value) {
+                    if (!value) return;
+                    getUvIndex(uvLocation, value);
+                }
+            });
+
+            // WARNINGS
+            function getWarnings(id) {
+                // Reset view
+                $("#warnings").addClass("d-none");
+                $("#warnings .data").html("");
+                $("#warnings .no-data").addClass("d-none");
+
+                if(!id) return;
+
+                // Call API
+                log("API GET /api/warnings/ to location:", id);
+                fetch(`http://localhost:${portNumber}/api/warnings/${id}`)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    log("Got " + data['data'].length + " warnings!");
+                    // Update cache stats
+                    updateCacheStats("warningsCacheStats", data);
+                    // Show context
+                    data['data'].forEach(w => showWarning(w));
+                    $("#warnings").removeClass("d-none");
+                    if(!data['data'].length) $("#warnings .no-data").removeClass("d-none");
+                })
+                .catch((err) => {
+                    log("ERROR calling API /api/warnings/:", err);
+                });;
+            }
+
+            function showWarning(w) {
+                let color = "success";
+                let colorName = "Verde";
+                switch(w['level']) {
+                    case 'yellow': color='warning'; colorName="Amarelo"; break;
+                    case 'red': color='danger'; colorName="Vermelho"; break;
+                    case 'orange': color='warning'; colorName="Laranja"; break;
+                }
+
+                $("#warnings .data").append(`
+                    <div class="col-4 p-3">
+                        <div class="border border-3 border-${color} p-3">
+                            <h6><span class="badge bg-${color}">Alerta ${colorName}!</span></h6>
+                            <h6 class="mb-0">${w['name']}</h6>
+                            <p class="small text-secondary">Em vigor entre ${parseDate(w['start'])} e ${parseDate(w['end'])}</p>
+                            <p>${w['text']}</p>
+                        </div>
+                    </div>
+                `);
+            }
+
+            // UVINDEX
+            function getUvIndex(id, day) {
+                // Reset view
+                $("#uvindexes").addClass("d-none");
+                $("#uvindexes .data").html("");
+                $("#uvindexes .no-data").addClass("d-none");
+
+                if(!id) return;
+                let url = `http://localhost:${portNumber}/api/uvindexes/${id}`;
+                if (day>0) {
+                    url += "/" + (day-1);
+                    log("API GET /api/uvindexes/ to location/day:", id, "/", day-1);
+                } else {
+                    log("API GET /api/uvindexes/ to location:", id);
+                }
+
                 // Call API
                 fetch(url)
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .then((data) => {
-                        callback(data['data']);
-                        updateCacheStats("locationCacheStats", data);
-                        locations = data['data'];
-                    })
-                    .catch((err) => {
-                        log("ERROR calling API /api/locations:", err);
-                    });
-                callback();
-            },
-            onChange: function (value) {
-                getWarnings("");
-                getUvIndex(0);
-                if (!value) return;
-                uvLocation = locations.filter(l => l['idArea']==value)[0]['id'];
-                log("Location selected: ", value, "/", uvLocation);
-                getWarnings(value);
-                getUvIndex(uvLocation, 0);
-            }
-        });
-
-        $("#uvDays").selectize({
-            onChange: function (value) {
-                if (!value) return;
-                getUvIndex(uvLocation, value);
-            }
-        });
-
-        // WARNINGS
-        function getWarnings(id) {
-            // Reset view
-            $("#warnings").addClass("d-none");
-            $("#warnings .data").html("");
-            $("#warnings .no-data").addClass("d-none");
-
-            if(!id) return;
-
-            // Call API
-            log("API GET /api/warnings/ to location:", id);
-            fetch("http://localhost:8080/api/warnings/" + id)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                log("Got " + data['data'].length + " warnings!");
-                // Update cache stats
-                updateCacheStats("warningsCacheStats", data);
-                // Show context
-                data['data'].forEach(w => showWarning(w));
-                $("#warnings").removeClass("d-none");
-                if(!data['data'].length) $("#warnings .no-data").removeClass("d-none");
-            })
-            .catch((err) => {
-                log("ERROR calling API /api/warnings/:", err);
-            });;
-        }
-
-        function showWarning(w) {
-            let color = "success";
-            let colorName = "Verde";
-            switch(w['level']) {
-                case 'yellow': color='warning'; colorName="Amarelo"; break;
-                case 'red': color='danger'; colorName="Vermelho"; break;
-                case 'orange': color='warning'; colorName="Laranja"; break;
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    log("Got " + data['data'].length + " results!");
+                    // Update cache stats
+                    updateCacheStats("uvindexesCacheStats", data);
+                    // Show context
+                    data['data'].forEach(w => showUvIndexes(w));
+                    $("#uvindexes").removeClass("d-none");
+                    if(!data['data'].length) $("#uvindexes .no-data").removeClass("d-none");
+                })
+                .catch((err) => {
+                    log("ERROR calling /api/uvindexes:", err);
+                });;
             }
 
-            $("#warnings .data").append(`
-                <div class="col-4 p-3">
-                    <div class="border border-3 border-${color} p-3">
-                        <h6><span class="badge bg-${color}">Alerta ${colorName}!</span></h6>
-                        <h6 class="mb-0">${w['name']}</h6>
-                        <p class="small text-secondary">Em vigor entre ${parseDate(w['start'])} e ${parseDate(w['end'])}</p>
-                        <p>${w['text']}</p>
-                    </div>
-                </div>
-            `);
-        }
-
-        // UVINDEX
-        function getUvIndex(id, day) {
-            // Reset view
-            $("#uvindexes").addClass("d-none");
-            $("#uvindexes .data").html("");
-            $("#uvindexes .no-data").addClass("d-none");
-
-            if(!id) return;
-            let url = "http://localhost:8080/api/uvindexes/" + id;
-            if (day>0) {
-                url += "/" + (day-1);
-                log("API GET /api/uvindexes/ to location/day:", id, "/", day-1);
-            } else {
-                log("API GET /api/uvindexes/ to location:", id);
-            }
-
-            // Call API
-            fetch(url)
-            .then((response) => {
-                return response.json();
-            })
-            .then((data) => {
-                log("Got " + data['data'].length + " results!");
-                // Update cache stats
-                updateCacheStats("uvindexesCacheStats", data);
-                // Show context
-                data['data'].forEach(w => showUvIndexes(w));
-                $("#uvindexes").removeClass("d-none");
-                if(!data['data'].length) $("#uvindexes .no-data").removeClass("d-none");
-            })
-            .catch((err) => {
-                log("ERROR calling /api/uvindexes:", err);
-            });;
-        }
-
-        function showUvIndexes(w) {
-            let color = "success";
-            if (w['index']>=8) {
-                color = "danger";
-            } else if (w['index']>=3) {
-                color = "warning";
-            }
-
-            $("#uvindexes .data").append(`
-                <div class="col-4 p-3">
-                    <div class="border border-3 border-${color} p-3">
-                        <h6><span class="badge bg-${color}">${w['indexClass']}</span></h6>
-                        <h6 class="mb-0">${w['index']}</h6>
-                        <p class="small text-secondary">Em vigor ${parseOnlyDate(w['date'])} entre as ${w['start']} e as ${w['end']} horas</p>
-                    </div>
-                </div>
-            `);
-        }
-
-        // AUXILIAR FUNCTIONS
-
-        function parseDate(date) {
-            date = new Date(date);
-            return date.getDate() + "/" + (date.getMonth()+1) + " às " + (date.getHours()+1) + ":" + date.getMinutes();
-        }
-
-        function parseOnlyDate(date) {
-            date = new Date(date);
-            return date.getDate() + "/" + (date.getMonth()+1);
-        }
-
-        // Cache usage stats
-        function updateCacheStats(id, data) {
-            ['cacheHits', 'cacheMisses', 'cacheExpired', 'cacheSize', 'requests'].forEach(
-                metric => {
-                    if ($("#" + id + " ." + metric).length>0) {
-                        $("#" + id + " ." + metric).text(data[metric]);
-                    }
+            function showUvIndexes(w) {
+                let color = "success";
+                if (w['index']>=8) {
+                    color = "danger";
+                } else if (w['index']>=3) {
+                    color = "warning";
                 }
-            )
-        }
 
-        // Log
-        function log() {
-            // Compute log text
-            let log = "";
-            for (var i = 0; i < arguments.length; i++) {
-                log += arguments[i];
-                log += " ";
+                $("#uvindexes .data").append(`
+                    <div class="col-4 p-3">
+                        <div class="border border-3 border-${color} p-3">
+                            <h6><span class="badge bg-${color}">${w['indexClass']}</span></h6>
+                            <h6 class="mb-0">${w['index']}</h6>
+                            <p class="small text-secondary">Em vigor ${parseOnlyDate(w['date'])} entre as ${w['start']} e as ${w['end']} horas</p>
+                        </div>
+                    </div>
+                `);
             }
-            // Log output
-            console.log(log);
-            $("#logs").append('<p class="small mb-0">' + log + '</p>');
-            // Scroll logs to bottom log
-            var element = document.getElementById("logs");
-            element.scrollTop = element.scrollHeight;
-        }
+
+            // AUXILIAR FUNCTIONS
+
+            function parseDate(date) {
+                date = new Date(date);
+                return date.getDate() + "/" + (date.getMonth()+1) + " às " + (date.getHours()+1) + ":" + date.getMinutes();
+            }
+
+            function parseOnlyDate(date) {
+                date = new Date(date);
+                return date.getDate() + "/" + (date.getMonth()+1);
+            }
+
+            // Cache usage stats
+            function updateCacheStats(id, data) {
+                ['cacheHits', 'cacheMisses', 'cacheExpired', 'cacheSize', 'requests'].forEach(
+                    metric => {
+                        if ($("#" + id + " ." + metric).length>0) {
+                            $("#" + id + " ." + metric).text(data[metric]);
+                        }
+                    }
+                )
+            }
+
+            // Log
+            function log() {
+                // Compute log text
+                let log = "";
+                for (var i = 0; i < arguments.length; i++) {
+                    log += arguments[i];
+                    log += " ";
+                }
+                // Log output
+                console.log(log);
+                $("#logs").append('<p class="small mb-0">' + log + '</p>');
+                // Scroll logs to bottom log
+                var element = document.getElementById("logs");
+                element.scrollTop = element.scrollHeight;
+            }
+        });
     </script>
 
 
