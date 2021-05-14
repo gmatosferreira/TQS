@@ -8,12 +8,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UVIndexServiceWithAPIUnitTest {
+class UVIndexServiceWithAPIUnitTest {
 
     private UVIndexService service = new UVIndexService();
 
     @Test
-    public void whenGetAll_thenReturnList() {
+    void whenGetAll_thenReturnList() {
         // Call service
         Entity<List<UVIndex>> response = service.getAllIndexes();
 
@@ -23,7 +23,7 @@ public class UVIndexServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetByExistentLocation_thenReturnMatch() {
+    void whenGetByExistentLocation_thenReturnMatch() {
         // Call service
         Entity<List<UVIndex>> response = service.getLocationIndex(3480200);
 
@@ -35,17 +35,17 @@ public class UVIndexServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetByInexistentLocation_thenReturnEmpty() {
+    void whenGetByInexistentLocation_thenReturnEmpty() {
         // Call service
         Entity<List<UVIndex>> response = service.getLocationIndex(999);
 
         // Test response
         assertThat(response.getData())
-                .hasSize(0);
+                .isEmpty();
     }
 
     @Test
-    public void whenGetByExistentLocationAndIndex_thenReturnMatch() {
+    void whenGetByExistentLocationAndIndex_thenReturnMatch() {
         // Call service
         Entity<List<UVIndex>> response = service.getLocationIndexByDay(3480200, 0);
 
@@ -58,13 +58,13 @@ public class UVIndexServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetByInexistentIndex_thenReturnEmpty() {
+    void whenGetByInexistentIndex_thenReturnEmpty() {
         // Call service
         Entity<List<UVIndex>> response = service.getLocationIndexByDay(3480200, 5);
 
         // Test response
         assertThat(response.getData())
-            .hasSize(0);
+            .isEmpty();
     }
 
 }

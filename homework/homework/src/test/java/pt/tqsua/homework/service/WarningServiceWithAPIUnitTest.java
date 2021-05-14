@@ -10,12 +10,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WarningServiceWithAPIUnitTest {
+class WarningServiceWithAPIUnitTest {
 
     private WarningService service = new WarningService();
 
     @Test
-    public void whenGetAll_thenReturnList() {
+    void whenGetAll_thenReturnList() {
         // Call service
         Entity<List<Warning>> response = service.getAllWarnings();
 
@@ -29,7 +29,7 @@ public class WarningServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetForLocation_thenReturnList() {
+    void whenGetForLocation_thenReturnList() {
         // Call service
         Entity<List<Warning>> response = service.getLocationWarnings("BGC");
 

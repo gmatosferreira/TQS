@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
+class LocationServiceWithMockAPIAndCacheValidationUnitTest {
 
     @Mock(lenient = true)
     private RestTemplate restTemplate;
@@ -44,11 +44,11 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
             Location l4 = new Location(4, "STR", "Santarém", "5.698", "-5.869");
 
             // Mock real API
-            when(restTemplate.getForObject(LocationService.API_URL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3,l4)));
+            when(restTemplate.getForObject(LocationService.APIURL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList(l1,l2,l3,l4)));
         }
 
         @Test
-        public void whenGetAll_thenReturnList() {
+        void whenGetAll_thenReturnList() {
             // Call service
             Entity<List<Location>> locations = locationService.getAllLocations();
 
@@ -64,7 +64,7 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenGetByExistentName_thenReturnMatch() {
+        void whenGetByExistentName_thenReturnMatch() {
             // Call service
             Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Brag");
 
@@ -80,12 +80,12 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenGetByNonExistentName_thenReturnMatch() {
+        void whenGetByNonExistentName_thenReturnMatch() {
             // Call service
             Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Port");
 
             // Test response
-            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getData()).isEmpty();
             assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
@@ -93,12 +93,12 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenGetDetails_returnObject() {
+        void whenGetDetails_returnObject() {
             // Call service
             Entity<Optional<Location>> location = locationService.getLocationDetails(1);
 
             // Test response
-            assertThat(location.getData().isEmpty()).isFalse();
+            assertThat(location.getData()).isPresent();
             assertThat(location.getData().get().getName()).isEqualTo("Aveiro");
             assertThat(location.getRequests()).isEqualTo(1);
 
@@ -107,23 +107,23 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenNotCache_getFromAPI() {
+        void whenNotCache_getFromAPI() {
             // Call service
             Entity<List<Location>> locations = locationService.getAllLocations();
 
             // Test response
-            assertThat(locations.getCacheHits()).isEqualTo(0);
+            assertThat(locations.getCacheHits()).isZero();
             assertThat(locations.getCacheMisses()).isEqualTo(1);
             assertThat(locations.getCacheSize()).isEqualTo(1);
             assertThat(locations.getRequests()).isEqualTo(1);
-            assertThat(locations.getCacheExpired()).isEqualTo(0);
+            assertThat(locations.getCacheExpired()).isZero();
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
         }
 
         @Test
-        public void whenCache_getFromCache() {
+        void whenCache_getFromCache() {
             // Call service
             Entity<List<Location>> locations = locationService.getAllLocations();
             locations = locationService.getAllLocations();
@@ -134,14 +134,14 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
             assertThat(locations.getCacheMisses()).isEqualTo(1);
             assertThat(locations.getCacheSize()).isEqualTo(1);
             assertThat(locations.getRequests()).isEqualTo(3);
-            assertThat(locations.getCacheExpired()).isEqualTo(0);
+            assertThat(locations.getCacheExpired()).isZero();
 
             // Test RestTemplate usage
             Mockito.verify(restTemplate, VerificationModeFactory.times(1)).getForObject("https://api.ipma.pt/open-data/distrits-islands.json", LocationsList.class);
         }
 
         @Test
-        public void whenCacheExpired_getFromAPI() throws Exception {
+        void whenCacheExpired_getFromAPI() throws Exception {
             // Call service
             Entity<List<Location>> locations = locationService.getAllLocations();
 
@@ -152,7 +152,7 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
             locations = locationService.getAllLocations();
 
             // Test response
-            assertThat(locations.getCacheHits()).isEqualTo(0);
+            assertThat(locations.getCacheHits()).isZero();
             assertThat(locations.getCacheMisses()).isEqualTo(2);
             assertThat(locations.getCacheSize()).isEqualTo(1);
             assertThat(locations.getRequests()).isEqualTo(2);
@@ -167,16 +167,16 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         @BeforeEach
         public void setUp() {
             // Mock real API
-            when(restTemplate.getForObject(LocationService.API_URL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList()));
+            when(restTemplate.getForObject(LocationService.APIURL, LocationsList.class)).thenReturn(new LocationsList(Arrays.asList()));
         }
 
         @Test
-        public void whenGetAll_thenReturnEmptyList() {
+        void whenGetAll_thenReturnEmptyList() {
             // Call service
             Entity<List<Location>> locations = locationService.getAllLocations();
 
             // Test response
-            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getData()).isEmpty();
             assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
@@ -184,12 +184,12 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenGetByName_thenReturnMatch() {
+        void whenGetByName_thenReturnMatch() {
             // Call service
             Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Brag");
 
             // Test response
-            assertThat(locations.getData()).hasSize(0);
+            assertThat(locations.getData()).isEmpty();
             assertThat(locations.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage
@@ -197,12 +197,12 @@ public class LocationServiceWithMockAPIAndCacheValidationUnitTest {
         }
 
         @Test
-        public void whenGetDetails_returnObject() {
+        void whenGetDetails_returnObject() {
             // Call service
             Entity<Optional<Location>> location = locationService.getLocationDetails(1);
 
             // Test response
-            assertThat(location.getData().isEmpty()).isTrue();
+            assertThat(location.getData()).isEmpty();
             assertThat(location.getRequests()).isEqualTo(1);
 
             // Test RestTemplate usage

@@ -143,18 +143,15 @@ public class UVIndex {
      */
     public boolean isDay(int day) {
         log.debug("Difference between {} and {}:", this.date, new Date());
-        Calendar now = Calendar.getInstance();
+        var now = Calendar.getInstance();
         now.setTime(new Date());
 
-        Calendar indexDate = Calendar.getInstance();
+        var indexDate = Calendar.getInstance();
         indexDate.setTime(this.date);
 
         int diff = indexDate.get(Calendar.DAY_OF_MONTH)-now.get(Calendar.DAY_OF_MONTH);
         log.debug("Returned {} days", diff);
-        if (diff == day) {
-            return true;
-        }
-        return false;
+        return diff==day;
     }
 
 

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(WarningController.class)
-public class WarningControllerTest {
+class WarningControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class WarningControllerTest {
     private WarningService service;
 
     @Test
-    public void givenWarnings_whenGetAll_thenReturnJsonArray() throws Exception {
+    void givenWarnings_whenGetAll_thenReturnJsonArray() throws Exception {
         // Create objects
         Warning w1 = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.RED, "BGC");
         Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
@@ -54,7 +54,7 @@ public class WarningControllerTest {
     }
 
     @Test
-    public void notGivenWarnings_whenGetAll_thenReturnEmptyJsonArray() throws Exception {
+    void notGivenWarnings_whenGetAll_thenReturnEmptyJsonArray() throws Exception {
         // Mock service
         when(service.getAllWarnings()).thenReturn(new Entity<List<Warning>>(Arrays.asList(), 0, 1, 1, 0));
 
@@ -68,7 +68,7 @@ public class WarningControllerTest {
     }
 
     @Test
-    public void givenWarnings_whenGetLocationMatch_thenReturnJsonArray() throws Exception {
+    void givenWarnings_whenGetLocationMatch_thenReturnJsonArray() throws Exception {
         String nameMatch = "AVR";
         // Create objects
         Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
@@ -87,7 +87,7 @@ public class WarningControllerTest {
     }
 
     @Test
-    public void whenGetLocationDontMatch_thenReturnJsonEmptyArray() throws Exception {
+    void whenGetLocationDontMatch_thenReturnJsonEmptyArray() throws Exception {
         String nameMatch = "PTR";
 
         // Mock service

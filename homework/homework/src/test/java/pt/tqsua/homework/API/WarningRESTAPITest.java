@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WarningRESTAPITest {
+class WarningRESTAPITest {
 
     @LocalServerPort
     int randomServerPort;
@@ -33,7 +33,7 @@ public class WarningRESTAPITest {
 
     @Test
     @Order(1)
-    public void whenGetWarnings_thenReturnJsonArray() {
+    void whenGetWarnings_thenReturnJsonArray() {
         // Make request to API
         ResponseEntity<Entity<List<Warning>>> response = restTemplate.exchange("/api/warnings", HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<Warning>>>() {});
 
@@ -44,13 +44,13 @@ public class WarningRESTAPITest {
                 .extracting(Warning::getLevel)
                 .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
         }
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(2)
-    public void whenGetLocation_thenReturnList() {
+    void whenGetLocation_thenReturnList() {
         // Make request to API
         ResponseEntity<Entity<List<Warning>>> response = restTemplate.exchange(String.format("/api/warnings/%s", "AVR"), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<Warning>>>() {});
 
@@ -64,7 +64,7 @@ public class WarningRESTAPITest {
                 .extracting(Warning::getLocation)
                 .containsOnly("AVR");
         }
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 }

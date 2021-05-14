@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
@@ -17,10 +16,10 @@ public class ViewController {
     @Autowired
     private ServletWebServerApplicationContext webServerAppCtxt;
 
-    @RequestMapping(path="/", method = RequestMethod.GET)
+    @GetMapping
     public String homepage(Model model) {
         model.addAttribute("runningPort", webServerAppCtxt.getWebServer().getPort());
-        log.debug("/");;
+        log.debug("/");
         return "index";
     }
 

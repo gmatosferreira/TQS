@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WarningServiceWithMockAPIUnitTest {
+class WarningServiceWithMockAPIUnitTest {
 
     @Mock(lenient = true)
     private RestTemplate restTemplate;
@@ -39,11 +39,11 @@ public class WarningServiceWithMockAPIUnitTest {
             ws[1] = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
 
             // Mock real API
-            when(restTemplate.getForObject(WarningService.API_URL, Warning[].class)).thenReturn(ws);
+            when(restTemplate.getForObject(WarningService.APIURL, Warning[].class)).thenReturn(ws);
         }
 
         @Test
-        public void whenGetAll_thenReturnList() {
+        void whenGetAll_thenReturnList() {
             // Call service
             Entity<List<Warning>> response = service.getAllWarnings();
 
@@ -59,7 +59,7 @@ public class WarningServiceWithMockAPIUnitTest {
         }
 
         @Test
-        public void whenGetForLocation_thenReturnList() {
+        void whenGetForLocation_thenReturnList() {
             // Call service
             Entity<List<Warning>> response = service.getLocationWarnings("BGC");
 
@@ -79,30 +79,30 @@ public class WarningServiceWithMockAPIUnitTest {
     class NegativeAnswer {
 
         @BeforeEach
-        public void setUp() {
+        void setUp() {
             // Mock real API
-            when(restTemplate.getForObject(WarningService.API_URL, Warning[].class)).thenReturn(new Warning[0]);
+            when(restTemplate.getForObject(WarningService.APIURL, Warning[].class)).thenReturn(new Warning[0]);
         }
 
         @Test
-        public void whenGetAll_thenReturnEmptyList() {
+        void whenGetAll_thenReturnEmptyList() {
             // Call service
             Entity<List<Warning>> response = service.getAllWarnings();
 
             // Test response
             assertThat(response.getData())
-                    .hasSize(0);
+                    .isEmpty();
 
         }
 
         @Test
-        public void whenGetForLocation_thenReturnEmptyList() {
+        void whenGetForLocation_thenReturnEmptyList() {
             // Call service
             Entity<List<Warning>> response = service.getLocationWarnings("BGC");
 
             // Test response
             assertThat(response.getData())
-                    .hasSize(0);
+                    .isEmpty();
 
         }
     }

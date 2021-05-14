@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UVIndexServiceWithMockAPIUnitTest {
+class UVIndexServiceWithMockAPIUnitTest {
 
     private static final Logger log = LoggerFactory.getLogger(UVIndexServiceWithMockAPIUnitTest.class);
 
@@ -50,11 +50,11 @@ public class UVIndexServiceWithMockAPIUnitTest {
             indexes[2].setIndex(indexes[2].getIndex());
 
             // Mock real API
-            when(restTemplate.getForObject(UVIndexService.API_URL, UVIndex[].class)).thenReturn(indexes);
+            when(restTemplate.getForObject(UVIndexService.APIURL, UVIndex[].class)).thenReturn(indexes);
         }
 
         @Test
-        public void whenGetAll_thenReturnList() {
+        void whenGetAll_thenReturnList() {
             // Call service
             Entity<List<UVIndex>> response = service.getAllIndexes();
 
@@ -70,7 +70,7 @@ public class UVIndexServiceWithMockAPIUnitTest {
         }
 
         @Test
-        public void whenGetByExistentLocation_thenReturnMatch() {
+        void whenGetByExistentLocation_thenReturnMatch() {
             // Call service
             Entity<List<UVIndex>> response = service.getLocationIndex(123);
 
@@ -83,7 +83,7 @@ public class UVIndexServiceWithMockAPIUnitTest {
         }
 
         @Test
-        public void whenGetByExistentLocationAndIndex_thenReturnMatch() {
+        void whenGetByExistentLocationAndIndex_thenReturnMatch() {
             // Call service
             Entity<List<UVIndex>> response = service.getLocationIndexByDay(123, 0);
 
@@ -98,23 +98,23 @@ public class UVIndexServiceWithMockAPIUnitTest {
         }
 
         @Test
-        public void whenGetByInexistentLocation_thenReturnEmpty() {
+        void whenGetByInexistentLocation_thenReturnEmpty() {
             // Call service
             Entity<List<UVIndex>> response = service.getLocationIndex(999);
 
             // Test response
             assertThat(response.getData())
-                .hasSize(0);
+                .isEmpty();
         }
 
         @Test
-        public void whenGetByInexistentIndex_thenReturnEmpty() {
+        void whenGetByInexistentIndex_thenReturnEmpty() {
             // Call service
             Entity<List<UVIndex>> response = service.getLocationIndexByDay(123, 2);
 
             // Test response
             assertThat(response.getData())
-                .hasSize(0);
+                .isEmpty();
         }
     }
 
@@ -124,16 +124,16 @@ public class UVIndexServiceWithMockAPIUnitTest {
         @BeforeEach
         public void setUp() {
             // Mock real API
-            when(restTemplate.getForObject(UVIndexService.API_URL, UVIndex[].class)).thenReturn(new UVIndex[0]);
+            when(restTemplate.getForObject(UVIndexService.APIURL, UVIndex[].class)).thenReturn(new UVIndex[0]);
         }
 
         @Test
-        public void whenGetAll_thenReturnEmptyList() {
+        void whenGetAll_thenReturnEmptyList() {
             // Call service
             Entity<List<UVIndex>> response = service.getAllIndexes();
             // Test response
             assertThat(response.getData())
-                .hasSize(0);
+                .isEmpty();
         }
 
 

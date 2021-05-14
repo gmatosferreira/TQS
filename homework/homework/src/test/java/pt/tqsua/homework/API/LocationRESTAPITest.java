@@ -23,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class LocationRESTAPITest {
+class LocationRESTAPITest {
 
     private static final Logger log = LoggerFactory.getLogger(LocationRESTAPITest.class);
 
@@ -36,7 +36,7 @@ public class LocationRESTAPITest {
 
     @Test
     @Order(1)
-    public void whenGetLocations_thenReturnJsonArray() {
+    void whenGetLocations_thenReturnJsonArray() {
         // Make request to API
         ResponseEntity<Entity<List<Location>>> response = restTemplate.exchange("/api/locations", HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<Location>>>() {});
 
@@ -46,13 +46,13 @@ public class LocationRESTAPITest {
                 .hasSizeGreaterThan(18)
                 .extracting(Location::getName)
                 .contains("Aveiro", "Braga", "Santarém");
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(2)
-    public void whenGetNameMatch_thenReturnList() {
+    void whenGetNameMatch_thenReturnList() {
         // Make request to API
         ResponseEntity<Entity<List<Location>>> response = restTemplate.exchange(String.format("/api/locations/search/%s", "Brag"), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<Location>>>() {});
 
@@ -62,45 +62,45 @@ public class LocationRESTAPITest {
                 .hasSize(2)
                 .extracting(Location::getName)
                 .containsExactly("Braga", "Bragança");
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(3)
-    public void whenGetNameDontMatch_thenReturnEmptyList() {
+    void whenGetNameDontMatch_thenReturnEmptyList() {
         // Make request to API
         ResponseEntity<Entity<List<Location>>> response = restTemplate.exchange(String.format("/api/locations/search/%s", "Arráb"), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<Location>>>() {});
 
         // Validate response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getData()).hasSize(0);
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getData()).isEmpty();
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(4)
-    public void givenLocation_whenGetLocation_thenReturnLocation() {
+    void givenLocation_whenGetLocation_thenReturnLocation() {
          // Make request to API
         ResponseEntity<Entity<Location>> response = restTemplate.exchange(String.format("/api/locations/%d", 1010500), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<Location>>() {});
         log.debug(response.getBody().toString());
         // Validate response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getBody().getData().getName()).isEqualTo("Aveiro");
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(5)
-    public void whenGetInexistentLocation_thenReturnNotFound() {
+    void whenGetInexistentLocation_thenReturnNotFound() {
         // Make request to API
         ResponseEntity<Entity<Location>> response = restTemplate.exchange(String.format("/api/locations/%d", 999), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<Location>>() {});
 
         // Validate response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 

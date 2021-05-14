@@ -20,7 +20,7 @@ public class CacheUnitTest {
     private static int exTTL = 3;
 
     @Nested
-    public class Populated {
+    class Populated {
 
         private Cache<String> cache;
 
@@ -42,20 +42,20 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void whenPut_getReturns() {
+        void whenPut_getReturns() {
             // get and validate
             assertThat(this.cache.get(exKey).isPresent(), is(true));
             assertThat(this.cache.get(exKey).get(), equalTo(exVal));
         }
 
         @Test
-        public void whenPut_containsKey() {
+        void whenPut_containsKey() {
             // contains and validate
             assertThat(this.cache.isPresent(exKey), is(true));
         }
 
         @Test
-        public void whenRemove_doesNotContain() {
+        void whenRemove_doesNotContain() {
             // contains and validate
             assertThat(this.cache.isPresent(exKey), is(true));
 
@@ -67,19 +67,19 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void whenClear_removeAll() {
+        void whenClear_removeAll() {
             // clear and validate
             assertThat(this.cache.clear(), is(2));
         }
 
         @Test
-        public void whenTTLNotExceeded_contains() {
+        void whenTTLNotExceeded_contains() {
             // contains and validate
             assertThat(this.cache.isPresent(exKeyTTL), is(true));
         }
 
         @Test
-        public void whenTTLExceeded_doesNotContain() throws Exception {
+        void whenTTLExceeded_doesNotContain() throws Exception {
             // wait for TTL to exceed
             TimeUnit.SECONDS.sleep(exTTL+1);
             // contains and validate
@@ -87,13 +87,13 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void whenTTLNotExceeded_cleanDoesNotReturn() {
+        void whenTTLNotExceeded_cleanDoesNotReturn() {
             // clean and validate
             assertThat(this.cache.clean(), is(0));
         }
 
         @Test
-        public void whenTTLNotExceeded_cleanReturns() throws Exception {
+        void whenTTLNotExceeded_cleanReturns() throws Exception {
             // wait for TTL to exceed
             TimeUnit.SECONDS.sleep(exTTL+1);
             // clean and validate
@@ -101,7 +101,7 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void validateStats() throws Exception {
+        void validateStats() throws Exception {
             // validate initial value
             assertThat(this.cache.getHits(), is(0));
             assertThat(this.cache.getMisses(), is(0));
@@ -130,7 +130,7 @@ public class CacheUnitTest {
     }
 
     @Nested
-    public class Empty {
+    class Empty {
 
         private Cache<String> cache;
 
@@ -147,19 +147,19 @@ public class CacheUnitTest {
         }
 
         @Test
-        public void whenEmpty_getReturnsEmpty() {
+        void whenEmpty_getReturnsEmpty() {
             // get and validate
             assertThat(this.cache.get("Entry1").isPresent(), is(false));
         }
 
         @Test
-        public void whenEmpty_doesNotContain() {
+        void whenEmpty_doesNotContain() {
             // contains and validate
             assertThat(this.cache.isPresent("ABC"), is(false));
         }
 
         @Test
-        public void whenClearEmpty_removeNone() {
+        void whenClearEmpty_removeNone() {
             // clear and validate
             assertThat(this.cache.clear(), is(0));
         }

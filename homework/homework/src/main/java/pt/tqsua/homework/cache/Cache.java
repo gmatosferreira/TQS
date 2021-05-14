@@ -29,7 +29,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         int size = entries.size();
         entries.clear();
         return size;
-    };
+    }
 
     /**
      * Removes all expired cache entries
@@ -42,7 +42,7 @@ public class Cache<T> implements IGenericCache<String, T>{
             this.expired += 1;
         }
         return expiredKeys.size();
-    };
+    }
 
     /**
      * Check if a certain key is already stored in the cache
@@ -53,7 +53,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         this.clean();
         this.misses += !entries.containsKey(key) ? 1 : 0;
         return entries.containsKey(key);
-    };
+    }
 
     /**
      * Given a key, retrieves a value stored in the cache
@@ -67,7 +67,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         this.misses += entry.isEmpty() ? 1 : 0;
         log.debug("Get from cache with {} hits and {} misses", this.hits, this.misses);
         return entry;
-    };
+    }
 
     /**
      * Stores a new entry to the cache, associated with a search key, with a ttl in seconds
@@ -76,8 +76,8 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @param ttl
      */
     public void put(String key, T value, int ttl) {
-        entries.put(key, new CacheEntry<T>(value, ttl));
-    };
+        entries.put(key, new CacheEntry<>(value, ttl));
+    }
 
     /**
      * Stores a new entry to the cache, associated with a search key
@@ -85,8 +85,8 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @param value
      */
     public void put(String key, T value) {
-        entries.put(key, new CacheEntry<T>(value));
-    };
+        entries.put(key, new CacheEntry<>(value));
+    }
 
     /**
      * Given a key, removes an entry from the cache
@@ -94,7 +94,7 @@ public class Cache<T> implements IGenericCache<String, T>{
      */
     public void remove(String key) {
         entries.remove(key);
-    };
+    }
 
     /**
      * Internal method to get expired keys

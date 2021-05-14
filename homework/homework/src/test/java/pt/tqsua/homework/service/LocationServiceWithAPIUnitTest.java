@@ -9,12 +9,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LocationServiceWithAPIUnitTest {
+class LocationServiceWithAPIUnitTest {
 
     private LocationService locationService = new LocationService();
 
     @Test
-    public void whenGetAll_thenReturnList() {
+    void whenGetAll_thenReturnList() {
         // Call service
         Entity<List<Location>> locations = locationService.getAllLocations();
 
@@ -27,7 +27,7 @@ public class LocationServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetByExistentName_thenReturnMatch() {
+    void whenGetByExistentName_thenReturnMatch() {
         // Call service
         Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Brag");
 
@@ -39,32 +39,32 @@ public class LocationServiceWithAPIUnitTest {
     }
 
     @Test
-    public void whenGetByNonExistentName_thenReturnMatch() {
+    void whenGetByNonExistentName_thenReturnMatch() {
         // Call service
         Entity<List<Location>> locations = locationService.getLocationsByNameMatch("Arráb");
 
         // Test response
-        assertThat(locations.getData()).hasSize(0);
+        assertThat(locations.getData()).isEmpty();
 
     }
 
     @Test
-    public void givenValidId_whenGetDetails_returnObject() {
+    void givenValidId_whenGetDetails_returnObject() {
         // Call service
         Entity<Optional<Location>> location = locationService.getLocationDetails(1010500);
 
         // Test response
-        assertThat(location.getData().isEmpty()).isFalse();
+        assertThat(location.getData()).isPresent();
         assertThat(location.getData().get().getName()).isEqualTo("Aveiro");
     }
 
     @Test
-    public void givenInvalidId_whenGetDetails_returnObject() {
+    void givenInvalidId_whenGetDetails_returnObject() {
         // Call service
         Entity<Optional<Location>> location = locationService.getLocationDetails(2);
 
         // Test response
-        assertThat(location.getData().isEmpty()).isTrue();
+        assertThat(location.getData()).isNotPresent();
     }
 
 

@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UVIndexController.class)
-public class UVIndexControllerTest {
+class UVIndexControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class UVIndexControllerTest {
     private UVIndexService service;
 
     @Test
-    public void givenIndexes_whenGetAll_thenReturnJsonArray() throws Exception {
+    void givenIndexes_whenGetAll_thenReturnJsonArray() throws Exception {
         // Create objects
         Calendar tomorrowCal = Calendar.getInstance();
         tomorrowCal.setTime(new Date());
@@ -60,7 +60,7 @@ public class UVIndexControllerTest {
     }
 
     @Test
-    public void notGivenIndexes_whenGetAll_thenReturnEmptyJsonArray() throws Exception {
+    void notGivenIndexes_whenGetAll_thenReturnEmptyJsonArray() throws Exception {
         // Mock service
         when(service.getAllIndexes()).thenReturn(new Entity<List<UVIndex>>(Arrays.asList(), 0, 1, 1, 0));
 
@@ -74,7 +74,7 @@ public class UVIndexControllerTest {
     }
 
     @Test
-    public void givenIndexes_whenGetLocation_thenReturnJsonArray() throws Exception {
+    void givenIndexes_whenGetLocation_thenReturnJsonArray() throws Exception {
         int location = 123;
         // Create objects
         Calendar tomorrowCal = Calendar.getInstance();
@@ -101,7 +101,7 @@ public class UVIndexControllerTest {
     }
 
     @Test
-    public void whenGetLocationDontMatch_thenReturnJsonEmptyArray() throws Exception {
+    void whenGetLocationDontMatch_thenReturnJsonEmptyArray() throws Exception {
         int location = 123;
 
         // Mock service
@@ -117,7 +117,7 @@ public class UVIndexControllerTest {
     }
 
     @Test
-    public void givenIndexes_whenGetLocationAndDay_thenReturnJsonArray() throws Exception {
+    void givenIndexes_whenGetLocationAndDay_thenReturnJsonArray() throws Exception {
         int location = 123;
         int day = 0;
         // Create objects
@@ -139,7 +139,7 @@ public class UVIndexControllerTest {
     }
 
     @Test
-    public void whenGetLocationAndDayDontMatch_thenReturnJsonEmptyArray() throws Exception {
+    void whenGetLocationAndDayDontMatch_thenReturnJsonEmptyArray() throws Exception {
         int location = 123;
         int day = 0;
 

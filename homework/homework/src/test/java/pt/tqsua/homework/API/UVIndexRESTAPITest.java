@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UVIndexRESTAPITest {
+class UVIndexRESTAPITest {
 
     @LocalServerPort
     int randomServerPort;
@@ -32,7 +32,7 @@ public class UVIndexRESTAPITest {
 
     @Test
     @Order(1)
-    public void whenGetIndexes_thenReturnJsonArray() {
+    void whenGetIndexes_thenReturnJsonArray() {
         // Make request to API
         ResponseEntity<Entity<List<UVIndex>>> response = restTemplate.exchange("/api/uvindexes", HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<UVIndex>>>() {});
 
@@ -41,13 +41,13 @@ public class UVIndexRESTAPITest {
         assertThat(response.getBody().getData())
             .extracting(UVIndex::getIndexClass)
             .containsAnyElementsOf(Arrays.asList("Extremo", "Muito Elevado", "Elevado", "Moderado", "Baixo"));
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(2)
-    public void whenGetByLocation_thenReturnList() {
+    void whenGetByLocation_thenReturnList() {
         int location = 3480200;
         // Make request to API
         ResponseEntity<Entity<List<UVIndex>>> response = restTemplate.exchange(String.format("/api/uvindexes/%d", location), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<UVIndex>>>() {});
@@ -60,13 +60,13 @@ public class UVIndexRESTAPITest {
         assertThat(response.getBody().getData())
             .extracting(UVIndex::getLocation)
             .containsOnly(location);
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
     @Test
     @Order(3)
-    public void whenGetByLocationAndDayIndex_thenReturnList() {
+    void whenGetByLocationAndDayIndex_thenReturnList() {
         int location = 3480200;
         int index = 0;
         // Make request to API
@@ -81,7 +81,7 @@ public class UVIndexRESTAPITest {
                 .extracting(UVIndex::getLocation)
                 .containsOnly(location);
         assertThat(response.getBody().getData().stream().allMatch(i -> i.isDay(index))).isTrue();
-        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isPositive();
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 }

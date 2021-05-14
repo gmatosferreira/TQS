@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LocationController.class)
-public class LocationControllerTest {
+class LocationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,7 +33,7 @@ public class LocationControllerTest {
     private LocationService locationService;
 
     @Test
-    public void givenLocations_whenGetLocations_thenReturnJsonArray() throws Exception {
+    void givenLocations_whenGetLocations_thenReturnJsonArray() throws Exception {
         // Create objects
         Location l1 = new Location(1, "AVR", "Aveiro", "1.234", "5.678");
         Location l2 = new Location(2, "BJA", "Beja", "5.698", "-5.369");
@@ -53,7 +53,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void notGivenLocations_whenGetLocations_thenReturnEmptyJsonArray() throws Exception {
+    void notGivenLocations_whenGetLocations_thenReturnEmptyJsonArray() throws Exception {
         // Mock service
         when(locationService.getAllLocations()).thenReturn(new Entity<List<Location>>(Arrays.asList(), 0, 1, 1, 0));
 
@@ -67,7 +67,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void givenLocations_whenGetNameMatch_thenReturnJsonArray() throws Exception {
+    void givenLocations_whenGetNameMatch_thenReturnJsonArray() throws Exception {
         String nameMatch = "Brag";
         // Create objects
         Location l1 = new Location(1, "BRG", "Braga", "1.234", "5.678");
@@ -88,7 +88,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void whenGetNameDontMatch_thenReturnJsonEmptyArray() throws Exception {
+    void whenGetNameDontMatch_thenReturnJsonEmptyArray() throws Exception {
         String nameMatch = "Av";
 
         // Mock service
@@ -104,7 +104,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void givenLocation_whenGetLocation_thenReturnJsonObject()  throws Exception {
+    void givenLocation_whenGetLocation_thenReturnJsonObject()  throws Exception {
         // Create object
         Location l1 = new Location(1, "AVR", "Aveiro", "1.234", "5.678");
 
@@ -124,7 +124,7 @@ public class LocationControllerTest {
     }
 
     @Test
-    public void whenGetInexistentLocation_thenReturnNotFound()  throws Exception {
+    void whenGetInexistentLocation_thenReturnNotFound()  throws Exception {
         int id = 1;
 
         // Mock service

@@ -14,7 +14,7 @@ public class CacheEntry<T> {
         this.value = value;
         this.ttl = ttl;
         this.created = Instant.now();
-    };
+    }
 
     public CacheEntry(T value) {
         // Default ttl of 30 seconds

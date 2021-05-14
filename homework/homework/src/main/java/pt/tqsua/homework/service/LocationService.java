@@ -28,7 +28,7 @@ public class LocationService {
 
     private Cache<LocationsList> cache = new Cache<>();
 
-    static String API_URL = "https://api.ipma.pt/open-data/distrits-islands.json";
+    static String APIURL = "https://api.ipma.pt/open-data/distrits-islands.json";
 
     public Entity<List<Location>> getAllLocations() {
         // Get data from API or cache
@@ -59,19 +59,19 @@ public class LocationService {
 
     private LocationsList getLocations() {
         // Check if cache has locations
-        Optional<LocationsList> list = cache.get(LocationService.API_URL);
+        Optional<LocationsList> list = cache.get(LocationService.APIURL);
         if(list.isPresent()) {
             log.debug("Cache has it, getting...");
             return list.get();
         }
         log.debug("Cache does not have it, getting from API...");
         // If it has not, make request to API
-        LocationsList locations = restTemplate.getForObject(LocationService.API_URL, LocationsList.class);
+        LocationsList locations = restTemplate.getForObject(LocationService.APIURL, LocationsList.class);
         if(locations==null) {
             locations = new LocationsList();
         }
         // Save to cache
-        this.cache.put(LocationService.API_URL, locations);
+        this.cache.put(LocationService.APIURL, locations);
         return locations;
     }
 

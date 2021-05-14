@@ -9,7 +9,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ViewSeleniumTest {
+class ViewSeleniumTest {
 
     private SeleniumConfig config;
 
@@ -27,7 +27,7 @@ public class ViewSeleniumTest {
     }
 
     @Test
-    public void test() {
+    void test() {
         ViewObject view = new ViewObject(config.getDriver(), randomServerPort);
 
         // Validate general stuff
