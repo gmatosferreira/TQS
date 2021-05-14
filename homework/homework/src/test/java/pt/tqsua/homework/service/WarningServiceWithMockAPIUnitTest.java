@@ -9,15 +9,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 import pt.tqsua.homework.model.Entity;
-import pt.tqsua.homework.model.Location;
-import pt.tqsua.homework.model.LocationsList;
 import pt.tqsua.homework.model.Warning;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

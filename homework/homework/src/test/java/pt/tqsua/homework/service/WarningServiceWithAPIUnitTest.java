@@ -2,7 +2,6 @@ package pt.tqsua.homework.service;
 
 import org.junit.jupiter.api.Test;
 import pt.tqsua.homework.model.Entity;
-import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.model.Warning;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 

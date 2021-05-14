@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.UVIndex;
-import pt.tqsua.homework.model.Warning;
-import pt.tqsua.homework.model.enums.AwarenessLevel;
 
 import java.util.Arrays;
 import java.util.List;

@@ -2,13 +2,8 @@ package pt.tqsua.homework.service;
 
 import org.junit.jupiter.api.Test;
 import pt.tqsua.homework.model.Entity;
-import pt.tqsua.homework.model.Location;
 import pt.tqsua.homework.model.UVIndex;
-import pt.tqsua.homework.model.Warning;
-import pt.tqsua.homework.model.enums.AwarenessLevel;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;

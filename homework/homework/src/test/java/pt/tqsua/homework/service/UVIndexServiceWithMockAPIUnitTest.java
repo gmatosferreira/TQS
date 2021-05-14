@@ -12,10 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.UVIndex;
-import pt.tqsua.homework.model.Warning;
-import pt.tqsua.homework.model.enums.AwarenessLevel;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;

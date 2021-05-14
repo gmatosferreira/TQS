@@ -9,18 +9,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.UVIndex;
-import pt.tqsua.homework.model.Warning;
-import pt.tqsua.homework.model.enums.AwarenessLevel;
 import pt.tqsua.homework.service.UVIndexService;
-import pt.tqsua.homework.service.WarningService;
 
-import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

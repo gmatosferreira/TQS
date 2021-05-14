@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.tqsua.homework.model.enums.AwarenessLevel;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Warning {

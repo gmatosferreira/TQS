@@ -16,12 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.Location;
-import pt.tqsua.homework.model.LocationsList;
-
-import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
-import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
