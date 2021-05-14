@@ -12,9 +12,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.css"
         rel="stylesheet">
 
-    <link href="https://raw.githubusercontent.com/daneden/animate.css/master/animate.css" rel="stylesheet">
-
-
     <style>
         #content {
             transform: scale(1.0);
@@ -76,7 +73,21 @@
                         <h6 class="mt-4">API Alertas</h6>
                         <dl id="warningsCacheStats">
                             <dt>Chamadas à API do Spring</dt>
-                            <dd class="requests animate__animated animate__flash animate__repeat-infinite"></dd>
+                            <dd class="requests"></dd>
+                            <dt>Chamadas à API externa</dt>
+                            <dd class="cacheMisses"></dd>
+                            <dt>Leituras da cache</dt>
+                            <dd class="cacheHits"></dd>
+                            <dt>Entradas na cache</dt>
+                            <dd class="cacheSize"></dd>
+                            <dt>Entradas expiradas</dt>
+                            <dd class="cacheExpired"></dd>
+                        </dl>
+
+                        <h6 class="mt-4">API Índices ultravioletas</h6>
+                        <dl id="uvindexesCacheStats">
+                            <dt>Chamadas à API do Spring</dt>
+                            <dd class="requests"></dd>
                             <dt>Chamadas à API externa</dt>
                             <dd class="cacheMisses"></dd>
                             <dt>Leituras da cache</dt>
@@ -105,13 +116,22 @@
                 </div>
                 <!-- END Location Select -->
 
+                <!-- UVIndexes -->
+                <div class="card col-12 border-0 mb-5 d-none" id="uvindexes">
+                    <div class="card-body">
+                        <h5 class="card-title">Índice de ultravioletas</h5>
+                        <h6 class="card-subtitle mb-2 text-muted no-data d-none">Não há índices disponíveis para a localização selecionada.</h6>
+                        <div class="d-flex flex-row flex-wrap data"></div>
+                    </div>
+                </div>
+                <!-- END UVIndexes -->
+
                 <!-- Warnings -->
                 <div class="card col-12 border-0 mb-5 d-none" id="warnings">
                     <div class="card-body">
                         <h5 class="card-title">Alertas em vigor</h5>
                         <h6 class="card-subtitle mb-2 text-muted no-data d-none">Não há alertas em vigor para a localização selecionada.</h6>
-                        <div class="d-flex flex-row flex-wrap data">
-                        </div>
+                        <div class="d-flex flex-row flex-wrap data"></div>
                     </div>
                 </div>
                 <!-- END Warnings -->
@@ -128,6 +148,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.js"></script>
     <script>
         // LOCATION
+        let locations = [];
         $('#location').selectize({
             valueField: 'idArea',
             labelField: 'name',
@@ -156,17 +177,21 @@
                     .then((data) => {
                         callback(data['data']);
                         updateCacheStats("locationCacheStats", data);
+                        locations = data['data'];
                     })
                     .catch((err) => {
-                        log("ERROR calling API:", err);
+                        log("ERROR calling API /api/locations:", err);
                     });
                 callback();
             },
             onChange: function (value) {
                 getWarnings("");
+                getUvIndex(0);
                 if (!value) return;
-                log("Location selected: ", value);
+                const id = locations.filter(l => l['idArea']==value)[0]['id'];
+                log("Location selected: ", value, "/", id);
                 getWarnings(value);
+                getUvIndex(id);
             }
         });
 
@@ -195,7 +220,7 @@
                 if(!data['data'].length) $("#warnings .no-data").removeClass("d-none");
             })
             .catch((err) => {
-                log("ERROR calling API:", err);
+                log("ERROR calling API /api/warnings/:", err);
             });;
         }
 
@@ -207,9 +232,6 @@
                 case 'red': color='danger'; colorName="Vermelho"; break;
                 case 'orange': color='warning'; colorName="Laranja"; break;
             }
-
-            console.log(w['start']);
-            console.log(new Date(w['start']));
 
             $("#warnings .data").append(`
                 <div class="col-4 p-3">
@@ -223,11 +245,64 @@
             `);
         }
 
+        // UVINDEX
+        function getUvIndex(id) {
+            // Reset view
+            $("#uvindexes").addClass("d-none");
+            $("#uvindexes .data").html("");
+            $("#uvindexes .no-data").addClass("d-none");
+
+            if(!id) return;
+
+            // Call API
+            log("API GET /api/uvindexes/ to location:", id);
+            fetch("http://localhost:8080/api/uvindexes/" + id)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                log("Got " + data['data'].length + " results!");
+                // Update cache stats
+                updateCacheStats("uvindexesCacheStats", data);
+                // Show context
+                data['data'].forEach(w => showUvIndexes(w));
+                $("#uvindexes").removeClass("d-none");
+                if(!data['data'].length) $("#uvindexes .no-data").removeClass("d-none");
+            })
+            .catch((err) => {
+                log("ERROR calling /api/uvindexes:", err);
+            });;
+        }
+
+        function showUvIndexes(w) {
+            let color = "success";
+            if (w['index']>=8) {
+                color = "danger";
+            } else if (w['index']>=3) {
+                color = "warning";
+            }
+
+            $("#uvindexes .data").append(`
+                <div class="col-4 p-3">
+                    <div class="border border-3 border-${color} p-3">
+                        <h6><span class="badge bg-${color}">${w['indexClass']}</span></h6>
+                        <h6 class="mb-0">${w['index']}</h6>
+                        <p class="small text-secondary">Em vigor ${parseOnlyDate(w['date'])} entre as ${w['start']} e as ${w['end']} horas</p>
+                    </div>
+                </div>
+            `);
+        }
+
         // AUXILIAR FUNCTIONS
 
         function parseDate(date) {
             date = new Date(date);
             return date.getDate() + "/" + (date.getMonth()+1) + " às " + (date.getHours()+1) + ":" + date.getMinutes();
+        }
+
+        function parseOnlyDate(date) {
+            date = new Date(date);
+            return date.getDate() + "/" + (date.getMonth()+1);
         }
 
         // Cache usage stats
