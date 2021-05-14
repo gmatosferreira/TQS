@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"localhost", "127.0.0.1"})
 public class UVIndexController {
 
     @Autowired

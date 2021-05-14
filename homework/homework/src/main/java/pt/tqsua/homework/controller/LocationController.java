@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"localhost", "127.0.0.1"})
 public class LocationController {
 
     @Autowired

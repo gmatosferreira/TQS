@@ -159,6 +159,7 @@
         $(document).ready(function() {
 
             const portNumber = $("#portNumber").text();
+            const APIURL = location.protocol + '//' + location.host + location.pathname;
             log("Making requests for port", portNumber);
             
             // GLOBAL VARS
@@ -182,7 +183,7 @@
                 load: function (query, callback) {
                     log("API GET /api/location/search/ to filter by:", query);
                     // Build API URL
-                    let url = `http://localhost:${portNumber}/api/locations/`;
+                    let url = `${APIURL}api/locations/`;
                     if (query.length) {
                         url += "search/" + query;
                     };
@@ -230,7 +231,7 @@
 
                 // Call API
                 log("API GET /api/warnings/ to location:", id);
-                fetch(`http://localhost:${portNumber}/api/warnings/${id}`)
+                fetch(`${APIURL}api/warnings/${id}`)
                 .then((response) => {
                     return response.json();
                 })
@@ -277,7 +278,7 @@
                 $("#uvindexes .no-data").addClass("d-none");
 
                 if(!id) return;
-                let url = `http://localhost:${portNumber}/api/uvindexes/${id}`;
+                let url = `${APIURL}api/uvindexes/${id}`;
                 if (day>0) {
                     url += "/" + (day-1);
                     log("API GET /api/uvindexes/ to location/day:", id, "/", day-1);
