@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+import pt.tqsua.homework.cache.Cache;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class HomeworkApplication {
@@ -16,10 +17,15 @@ public class HomeworkApplication {
 		return new RestTemplate();
 	}
 
+	@Bean
+	public Cache cache() {
+		return new Cache<>();
+	}
+
 	private static final Logger log = LoggerFactory.getLogger(HomeworkApplication.class);
 
 	public static void main(String[] args) {
-		log.debug("Starting app...");
+		System.out.println("Testing Jenkins pipeline integration...");
 		SpringApplication.run(HomeworkApplication.class, args);
 	}
 
