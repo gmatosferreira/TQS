@@ -1,11 +1,17 @@
 package pt.tqsua.homework.model.enums;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum AwarenessLevel {
 
-    green("Verde"),
-    yellow("Amarelo"),
-    orange("Laranja"),
-    red("Vermelho");
+    @JsonProperty("green")  GREEN("Verde"),
+    @JsonProperty("yellow") YELLOW("Amarelo"),
+    @JsonProperty("orange") ORANGE("Laranja"),
+    @JsonProperty("red") RED("Vermelho"),
+    VERDE("Verde"),
+    AMARELO("Amarelo"),
+    LARANJA("Laranja"),
+    VERMELHO("Vermelho");
 
     private final String name;
 
@@ -14,11 +20,11 @@ public enum AwarenessLevel {
     }
 
     public String getName() {
-        return name;
+        return name.toUpperCase();
     }
 
     @Override
     public String toString() {
-        return name;
+        return name.toUpperCase();
     }
 }

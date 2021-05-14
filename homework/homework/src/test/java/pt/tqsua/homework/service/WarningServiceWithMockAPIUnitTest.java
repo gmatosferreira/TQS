@@ -39,8 +39,8 @@ public class WarningServiceWithMockAPIUnitTest {
         public void setUp() {
             // Create objects
             Warning[] ws = new Warning[2];
-            ws[0] = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.red, "BGC");
-            ws[1] = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.orange, "AVR");
+            ws[0] = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.RED, "BGC");
+            ws[1] = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
 
             // Mock real API
             when(restTemplate.getForObject(WarningService.API_URL, Warning[].class)).thenReturn(ws);
@@ -55,7 +55,7 @@ public class WarningServiceWithMockAPIUnitTest {
             assertThat(response.getData())
                     .hasSize(2)
                     .extracting(Warning::getLevel)
-                    .containsAnyElementsOf(Arrays.asList(AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
+                    .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
             assertThat(response.getData())
                     .extracting(Warning::getLocation)
                     .containsOnly("BGC", "AVR");
@@ -71,7 +71,7 @@ public class WarningServiceWithMockAPIUnitTest {
             assertThat(response.getData())
                     .hasSize(1)
                     .extracting(Warning::getLevel)
-                    .containsAnyElementsOf(Arrays.asList(AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
+                    .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
             assertThat(response.getData())
                     .extracting(Warning::getLocation)
                     .containsOnly("BGC");

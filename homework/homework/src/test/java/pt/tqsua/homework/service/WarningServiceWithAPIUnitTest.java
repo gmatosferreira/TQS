@@ -25,7 +25,7 @@ public class WarningServiceWithAPIUnitTest {
         if (response.getData().size()>0) {
             assertThat(response.getData())
                 .extracting(Warning::getLevel)
-                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.green, AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
+                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
         }
     }
 
@@ -39,7 +39,7 @@ public class WarningServiceWithAPIUnitTest {
         if (response.getData().size()>0) {
             assertThat(response.getData())
                 .extracting(Warning::getLevel)
-                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.green, AwarenessLevel.orange, AwarenessLevel.red, AwarenessLevel.yellow));
+                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
             assertThat(response.getData())
                 .extracting(Warning::getLocation)
                 .containsOnly("BGC");

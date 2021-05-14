@@ -14,7 +14,6 @@ import pt.tqsua.homework.service.WarningService;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -37,8 +36,8 @@ public class WarningControllerTest {
     @Test
     public void givenWarnings_whenGetAll_thenReturnJsonArray() throws Exception {
         // Create objects
-        Warning w1 = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.red, "BGC");
-        Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.orange, "AVR");
+        Warning w1 = new Warning("Agitação Marítima", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.RED, "BGC");
+        Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
 
         // Mock service
         when(service.getAllWarnings()).thenReturn(new Entity<List<Warning>>(Arrays.asList(w1, w2), 0, 1, 1, 0));
@@ -72,7 +71,7 @@ public class WarningControllerTest {
     public void givenWarnings_whenGetLocationMatch_thenReturnJsonArray() throws Exception {
         String nameMatch = "AVR";
         // Create objects
-        Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.orange, "AVR");
+        Warning w2 = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
 
         // Mock service
         when(service.getLocationWarnings(nameMatch)).thenReturn(new Entity<List<Warning>>(Arrays.asList(w2), 0, 1, 1, 0));

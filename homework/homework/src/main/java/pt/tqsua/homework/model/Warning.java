@@ -53,8 +53,8 @@ public class Warning {
     }
 
     @JsonProperty("level")
-    public AwarenessLevel getLevel() {
-        return level;
+    public String getLevel() {
+        return level.toString();
     }
 
     @JsonProperty("awarenessLevelID")
