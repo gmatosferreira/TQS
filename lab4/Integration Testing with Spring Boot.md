@@ -68,6 +68,8 @@ Para <u>validar os serviços de acesso aos dados</u> fornecidos pelo repositóri
 Os métodos da `TestEntityManager` mais comuns são `persist(E entity)` e `flush()`, que permitem adicionar entidades ao gestor (persist) e sincronizar (flush) a persistência com a base de dados. O `persistAndFlush(E entity)` permite fazer os dois em simultâneo.
 
 ```java
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 class ObjectRepositoryTest {
 
@@ -102,6 +104,8 @@ Para <u>validar a lógica do negócio</u> fornecida pela implementação dos ser
 > Para além dos valores retornados pelo serviço, é importante validar também o número de chamadas aos métodos do repositório!
 
 ```java
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(MockitoExtension.class)
 public class ObjectService_UnitTest {
 
@@ -133,6 +137,7 @@ public class ObjectService_UnitTest {
             .contains(obj1.getName(), obj2.getName());
         // Alternative (for objects)
         assertThat(op.isPresent(), is(true));
+        assertThat(fromDb.getName()).isEqualTo("john");
         
         // Test repository usage
         Mockito.verify(objectRepository, VerificationModeFactory.times(1)).findAll();
@@ -163,6 +168,8 @@ Numa primeira <u>avaliação dos  controladores</u> não é necessário testar a
 >
 > org.springframework.test.web.servlet.MockMvc;
 >
+> static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get/post;
+>
 > org.springframework.boot.test.mock.mockito.MockBean;
 
 ```java
@@ -176,10 +183,10 @@ public class ObjectController_WithMockService {
     private ObjectService service;
 
     @Test
-    public void MyTest() {
+    public void givenObjects_whenGetObjects_thenReturnJsonArray() {
         // Create object instances
         // Moch service
-        given(service.getAllObjects()).thenReturn(Arrays.asList(obj1, obj2));
+        when(service.getAllObjects()).thenReturn(Arrays.asList(obj1, obj2));
         
         // Make request to API and validate response
         mvc.perform(get("/api/objects").contentType(MediaType.APPLICATION_JSON))
