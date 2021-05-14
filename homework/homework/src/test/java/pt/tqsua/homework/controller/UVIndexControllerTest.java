@@ -95,9 +95,9 @@ public class UVIndexControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("data", hasSize(2)))
             .andExpect(jsonPath("data[0].index", is(u1.getIndex())))
-            .andExpect(jsonPath("data[1].index", is(u2.getIndex())));
-            // .andExpect(jsonPath("data[0].index", in(Arrays.asList(u1.getIndex(), u2.getIndex()))))
-            // .andExpect(jsonPath("data[1].index", in(Arrays.asList(u1.getIndex(), u2.getIndex()))));
+            .andExpect(jsonPath("data[0].indexClass", is(u1.getIndexClass())))
+            .andExpect(jsonPath("data[1].index", is(u2.getIndex())))
+            .andExpect(jsonPath("data[1].indexClass", is(u2.getIndexClass())));
 
         // Validate service usage
         verify(service, VerificationModeFactory.times(1)).getLocationIndex(location);
@@ -133,7 +133,9 @@ public class UVIndexControllerTest {
         mockMvc.perform(get(String.format("/api/uvindexes/%d/%d", location, day)).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("data", hasSize(1)))
-            .andExpect(jsonPath("data[0].index", is(u1.getIndex())));
+            .andExpect(jsonPath("data[0].index", is(u1.getIndex())))
+            .andExpect(jsonPath("data[0].indexClass", is(u1.getIndexClass())));
+
 
         // Validate service usage
         verify(service, VerificationModeFactory.times(1)).getLocationIndexByDay(location, day);

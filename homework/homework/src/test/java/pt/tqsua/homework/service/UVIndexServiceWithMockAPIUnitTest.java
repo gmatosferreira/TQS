@@ -42,8 +42,11 @@ public class UVIndexServiceWithMockAPIUnitTest {
             Date tomorrow = tomorrowCal.getTime();
             UVIndex[] indexes = new UVIndex[3];
             indexes[0] = new UVIndex(123, 12, 16, new Date(), 5.6);
+            indexes[0].setIndex(indexes[0].getIndex());
             indexes[1] = new UVIndex(123, 12, 16, tomorrow, 5.8);
+            indexes[1].setIndex(indexes[1].getIndex());
             indexes[2] = new UVIndex(456, 12, 16, new Date(), 7);
+            indexes[2].setIndex(indexes[2].getIndex());
 
             // Mock real API
             when(restTemplate.getForObject(UVIndexService.API_URL, UVIndex[].class)).thenReturn(indexes);
@@ -85,9 +88,12 @@ public class UVIndexServiceWithMockAPIUnitTest {
 
             // Test response
             assertThat(response.getData())
-                    .hasSize(1)
-                    .extracting(UVIndex::getIndex)
-                    .containsOnly(5.6);
+                .hasSize(1)
+                .extracting(UVIndex::getIndex)
+                .containsOnly(5.6);
+            assertThat(response.getData())
+                .extracting(UVIndex::getIndexClass)
+                .containsOnly("Moderado");
         }
 
         @Test

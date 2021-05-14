@@ -16,6 +16,8 @@ public class UVIndex {
     private Date date;
     private double index;
     private int location;
+    @JsonProperty("indexClass")
+    private String indexClass;
 
     public UVIndex() {
     }
@@ -93,11 +95,31 @@ public class UVIndex {
     @JsonProperty("iUv")
     public void setIndex(double index) {
         this.index = index;
+        // Define class
+        if (index>=11) {
+            this.indexClass = "Extremo";
+        } else if (index>=8) {
+            this.indexClass = "Muito Elevado";
+        } else if (index>=6) {
+            this.indexClass = "Elevado";
+        } else if (index>=3) {
+            this.indexClass = "Moderado";
+        } else {
+            this.indexClass = "Baixo";
+        }
     }
 
     @JsonProperty("index")
     public void setIndex2(double index) {
-        this.index = index;
+        this.setIndex(index);
+    }
+
+    public String getIndexClass() {
+        return indexClass;
+    }
+
+    public void setIndexClass(String indexClass) {
+        this.indexClass = indexClass;
     }
 
     @Override
@@ -139,4 +161,6 @@ public class UVIndex {
         }
         return false;
     }
+
+
 }
