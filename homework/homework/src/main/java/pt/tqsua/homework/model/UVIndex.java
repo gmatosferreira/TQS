@@ -142,7 +142,7 @@ public class UVIndex {
      * @return isDay true if index matches
      */
     public boolean isDay(int day) {
-        log.debug("Difference between {} and {}:", this.date.toString(), new Date().toString());
+        log.debug("Difference between {} and {}:", this.date, new Date());
         /*
         long diffInMillies = Math.abs(this.date.getTime()-new Date().getTime());
         int diff = (int)TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);

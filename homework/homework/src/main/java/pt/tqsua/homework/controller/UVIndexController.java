@@ -29,7 +29,6 @@ public class UVIndexController {
     @GetMapping("/uvindexes/{locationId}")
     public Entity<List<UVIndex>> getIndexesByLocation(@PathVariable @NotNull int locationId) {
         log.debug("GET UVIndex for location {}", locationId);
-        System.out.println("\n\n\n");
         return service.getLocationIndex(locationId);
     }
 
