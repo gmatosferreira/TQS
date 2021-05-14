@@ -57,7 +57,7 @@ public class LocationService {
 
     private LocationsList getLocations() {
         // Check if cache has locations
-        if(cache.isPresent(LocationService.API_URL)) {
+        if(cache.isPresent(LocationService.API_URL)  && cache.get(LocationService.API_URL).isPresent()) {
             System.out.println("Cache has it, getting...");
             return cache.get(LocationService.API_URL).get();
         }

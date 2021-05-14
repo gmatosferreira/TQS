@@ -48,7 +48,7 @@ public class UVIndexService {
 
     private List<UVIndex> getWarnings() {
         // Check if cache has locations
-        if(cache.isPresent(UVIndexService.API_URL)) {
+        if(cache.isPresent(UVIndexService.API_URL) && cache.get(UVIndexService.API_URL).isPresent()) {
             System.out.println("Cache has it, getting...");
             return cache.get(UVIndexService.API_URL).get();
         }

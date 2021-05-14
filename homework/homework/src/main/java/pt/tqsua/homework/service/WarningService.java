@@ -39,7 +39,7 @@ public class WarningService {
 
     private List<Warning> getWarnings() {
         // Check if cache has locations
-        if(cache.isPresent(WarningService.API_URL)) {
+        if(cache.isPresent(WarningService.API_URL) && cache.get(WarningService.API_URL).isPresent()) {
             System.out.println("Cache has it, getting...");
             return cache.get(WarningService.API_URL).get();
         }
