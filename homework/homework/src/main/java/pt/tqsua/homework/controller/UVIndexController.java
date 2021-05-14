@@ -2,10 +2,7 @@ package pt.tqsua.homework.controller;
 
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.UVIndex;
 import pt.tqsua.homework.model.Warning;
@@ -16,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class UVIndexController {
 
     @Autowired
