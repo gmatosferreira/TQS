@@ -59,7 +59,7 @@
                         <h6 class="mt-4">API Localizações</h6>
                         <dl id="locationCacheStats">
                             <dt>Chamadas à API do Spring</dt>
-                            <dd class="requests animate__animated animate__flash animate__repeat-infinite"></dd>
+                            <dd class="requests"></dd>
                             <dt>Chamadas à API externa</dt>
                             <dd class="cacheMisses"></dd>
                             <dt>Leituras da cache</dt>
@@ -107,7 +107,7 @@
             <!-- Dashboard -->
             <div class="col-8 mx-auto">
                 <!-- Location Select -->
-                <div class="card col-12 border-0 mb-5">
+                <div class="card col-12 border-0 mb-5" id="locations">
                     <div class="card-body">
                         <h5 class="card-title">Alertas meteorológicos</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Escolha a sua localização</h6>
@@ -120,7 +120,7 @@
                 <div class="card col-12 border-0 mb-5 d-none" id="uvindexes">
                     <div class="card-body">
                         <div class="d-flex flex-row">
-                            <h5 class="card-title me-3">Índice de ultravioletas</h5>
+                            <h5 class="card-title me-3">Índices de ultravioletas</h5>
                             <select id="uvDays" class="ms-auto col-4">
                                 <option selected value="0">Todos</option>
                                 <option value="1">Hoje</option>
