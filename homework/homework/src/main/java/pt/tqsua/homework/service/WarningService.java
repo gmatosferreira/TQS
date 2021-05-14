@@ -1,15 +1,11 @@
 package pt.tqsua.homework.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pt.tqsua.homework.cache.Cache;
 import pt.tqsua.homework.model.Entity;
-import pt.tqsua.homework.model.Location;
-import pt.tqsua.homework.model.LocationsList;
 import pt.tqsua.homework.model.Warning;
-import pt.tqsua.homework.model.enums.AwarenessLevel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,13 +39,16 @@ public class WarningService {
 
     private List<Warning> getWarnings() {
         // Check if cache has locations
-        if(cache.containsKey(WarningService.API_URL)) {
+        if(cache.isPresent(WarningService.API_URL)) {
             System.out.println("Cache has it, getting...");
             return cache.get(WarningService.API_URL).get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
         Warning[] response = restTemplate.getForObject(WarningService.API_URL, Warning[].class);
+        if(response==null) {
+            response = new Warning[0];
+        }
         List<Warning> warnings = response.length>0 ? Arrays.asList(response) : Arrays.asList();
         // Save to cache
         this.cache.put(WarningService.API_URL, warnings);

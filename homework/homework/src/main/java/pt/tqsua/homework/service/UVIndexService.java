@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pt.tqsua.homework.cache.Cache;
 import pt.tqsua.homework.model.Entity;
+import pt.tqsua.homework.model.LocationsList;
 import pt.tqsua.homework.model.UVIndex;
-import pt.tqsua.homework.model.Warning;
 
 import java.util.Arrays;
 import java.util.List;
@@ -48,13 +48,16 @@ public class UVIndexService {
 
     private List<UVIndex> getWarnings() {
         // Check if cache has locations
-        if(cache.containsKey(UVIndexService.API_URL)) {
+        if(cache.isPresent(UVIndexService.API_URL)) {
             System.out.println("Cache has it, getting...");
             return cache.get(UVIndexService.API_URL).get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
         UVIndex[] response = restTemplate.getForObject(UVIndexService.API_URL, UVIndex[].class);
+        if(response==null) {
+            response = new UVIndex[0];
+        }
         List<UVIndex> indexes = response.length>0 ? Arrays.asList(response) : Arrays.asList();
         // Save to cache
         this.cache.put(UVIndexService.API_URL, indexes);

@@ -57,13 +57,16 @@ public class LocationService {
 
     private LocationsList getLocations() {
         // Check if cache has locations
-        if(cache.containsKey(LocationService.API_URL)) {
+        if(cache.isPresent(LocationService.API_URL)) {
             System.out.println("Cache has it, getting...");
             return cache.get(LocationService.API_URL).get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
         LocationsList locations = restTemplate.getForObject(LocationService.API_URL, LocationsList.class);
+        if(locations==null) {
+            locations = new LocationsList();
+        }
         // Save to cache
         this.cache.put(LocationService.API_URL, locations);
         return locations;
