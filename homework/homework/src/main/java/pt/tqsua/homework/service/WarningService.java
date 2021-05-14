@@ -9,6 +9,7 @@ import pt.tqsua.homework.model.Warning;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,9 +40,10 @@ public class WarningService {
 
     private List<Warning> getWarnings() {
         // Check if cache has locations
-        if(cache.isPresent(WarningService.API_URL) && cache.get(WarningService.API_URL).isPresent()) {
+        Optional<List<Warning>> list = cache.get(WarningService.API_URL);
+        if(list.isPresent()) {
             System.out.println("Cache has it, getting...");
-            return cache.get(WarningService.API_URL).get();
+            return list.get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API

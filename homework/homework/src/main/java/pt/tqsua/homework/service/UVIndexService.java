@@ -10,6 +10,7 @@ import pt.tqsua.homework.model.UVIndex;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,9 +49,10 @@ public class UVIndexService {
 
     private List<UVIndex> getWarnings() {
         // Check if cache has locations
-        if(cache.isPresent(UVIndexService.API_URL) && cache.get(UVIndexService.API_URL).isPresent()) {
+        Optional<List<UVIndex>> list = cache.get(UVIndexService.API_URL);
+        if(list.isPresent()) {
             System.out.println("Cache has it, getting...");
-            return cache.get(UVIndexService.API_URL).get();
+            return list.get();
         }
         System.out.println("Cache does not have it, getting from API...");
         // If it has not, make request to API
