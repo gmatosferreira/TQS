@@ -28,13 +28,14 @@ public class UVIndexController {
 
     @GetMapping("/uvindexes/{locationId}")
     public Entity<List<UVIndex>> getIndexesByLocation(@PathVariable @NotNull int locationId) {
-        log.debug(String.format("GET UVIndex for location %d", locationId));
+        log.debug("GET UVIndex for location {}", locationId);
+        System.out.println("\n\n\n");
         return service.getLocationIndex(locationId);
     }
 
     @GetMapping("/uvindexes/{locationId}/{day}")
     public Entity<List<UVIndex>> getIndexesByLocation(@PathVariable @NotNull int locationId, @PathVariable @NotNull int day) {
-        log.debug(String.format("GET UVIndex for location %d and day %d", locationId, day));
+        log.debug("GET UVIndex for location {} and day {}", locationId, day);
         return service.getLocationIndexByDay(locationId, day);
     }
 

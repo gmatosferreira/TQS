@@ -31,7 +31,7 @@ public class LocationController {
 
     @GetMapping("/locations/search/{nameMatch}")
     public Entity<List<Location>> getLocationByNameMatch(@PathVariable String nameMatch) {
-        log.debug(String.format("GET Search by %s", nameMatch));
+        log.debug("GET Search by {}", nameMatch);
         return locationService.getLocationsByNameMatch(nameMatch);
     }
 

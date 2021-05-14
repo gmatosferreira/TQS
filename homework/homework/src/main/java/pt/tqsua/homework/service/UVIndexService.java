@@ -29,7 +29,7 @@ public class UVIndexService {
     public Entity<List<UVIndex>> getAllIndexes() {
         // Get data from API or cache
         List<UVIndex> indexesList = this.getWarnings();
-        log.debug(String.format("GET warnings list from API returned list of size %d", indexesList.size()));
+        log.debug("GET warnings list from API returned list of size {}", indexesList.size());
         // Return locations list
         return new Entity<>(indexesList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -37,7 +37,7 @@ public class UVIndexService {
     public Entity<List<UVIndex>> getLocationIndexByDay(int location, int day) {
         // Get data from API or cache
         List<UVIndex> indexesList = this.getWarnings().stream().filter(w -> w.getLocation()==location && w.isDay(day)).collect(Collectors.toList());
-        log.debug(String.format("GET IV Index from API filtered by location %d for day %d returned list of size %d", location, day, indexesList.size()));
+        log.debug("GET IV Index from API filtered by location {} for day {} returned list of size {}", location, day, indexesList.size());
         // Return locations list
         return new Entity<>(indexesList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -45,7 +45,7 @@ public class UVIndexService {
     public Entity<List<UVIndex>> getLocationIndex(int location) {
         // Get data from API or cache
         List<UVIndex> indexesList = this.getWarnings().stream().filter(w -> w.getLocation()==location).collect(Collectors.toList());
-        log.debug(String.format("GET IV Index from API filtered by location %d returned list of size %d", location, indexesList.size()));
+        log.debug("GET IV Index from API filtered by location {} returned list of size {}", location, indexesList.size());
         // Return locations list
         return new Entity<>(indexesList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }

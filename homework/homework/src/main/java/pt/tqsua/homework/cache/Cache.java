@@ -65,7 +65,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         Optional<T> entry = entries.containsKey(key) ? Optional.of(entries.get(key).getValue()) : Optional.empty();
         this.hits += entry.isPresent() ? 1 : 0;
         this.misses += entry.isEmpty() ? 1 : 0;
-        log.debug(String.format("Get from cache with %d hits and %d misses", this.hits, this.misses));
+        log.debug("Get from cache with {} hits and {} misses", this.hits, this.misses);
         return entry;
     };
 

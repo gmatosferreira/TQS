@@ -142,7 +142,7 @@ public class UVIndex {
      * @return isDay true if index matches
      */
     public boolean isDay(int day) {
-        log.debug(String.format("Difference between %s and %s:", this.date.toString(), new Date().toString()));
+        log.debug("Difference between {} and {}:", this.date.toString(), new Date().toString());
         /*
         long diffInMillies = Math.abs(this.date.getTime()-new Date().getTime());
         int diff = (int)TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
@@ -157,7 +157,7 @@ public class UVIndex {
         indexDate.setTime(this.date);
 
         int diff = indexDate.get(Calendar.DAY_OF_MONTH)-now.get(Calendar.DAY_OF_MONTH);
-        log.debug(String.format("Returned %d days", diff));
+        log.debug("Returned {} days", diff);
         if (diff == day) {
             return true;
         }

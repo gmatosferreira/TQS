@@ -28,7 +28,7 @@ public class WarningController {
 
     @GetMapping("/warnings/{locationId}")
     public Entity<List<Warning>> getLocationByNameMatch(@PathVariable @NotNull String locationId) {
-        log.debug(String.format("GET Warnings search by %s", locationId));
+        log.debug("GET Warnings search by {}", locationId);
         return service.getLocationWarnings(locationId);
     }
 

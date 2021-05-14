@@ -33,7 +33,7 @@ public class LocationService {
     public Entity<List<Location>> getAllLocations() {
         // Get data from API or cache
         LocationsList locationList = this.getLocations();
-        log.debug(String.format("GET locations list from API returned list of size %d", locationList.getLocations().size()));
+        log.debug("GET locations list from API returned list of size {}", locationList.getLocations().size());
         // Return locations list
         return new Entity<>(locationList.getLocations(), this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -43,7 +43,7 @@ public class LocationService {
         LocationsList locationList = this.getLocations();
         // Filter by name
         List<Location> location = locationList.getLocations().stream().filter(l -> l.getName().toLowerCase().contains(nameMatch.toLowerCase())).collect(Collectors.toList());
-        log.debug(String.format("Filtering %d locations for name %s and got %d matches.", locationList.getLocations().size(), nameMatch, location.size()));
+        log.debug("Filtering {} locations for name {} and got {} matches.", locationList.getLocations().size(), nameMatch, location.size());
         log.debug(location.size()>0 ? location.get(0).toString() : "NOT FOUND");
         return new Entity<>(location, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -53,7 +53,7 @@ public class LocationService {
         LocationsList locationList = this.getLocations();
         // Filter by given ID
         List<Location> location = locationList.getLocations().stream().filter(l -> l.getId().equals(locationId)).collect(Collectors.toList());
-        log.debug(String.format("Filtering %d locations for ID %d and got %d matches.", locationList.getLocations().size(), locationId, location.size()));
+        log.debug("Filtering {} locations for ID {} and got {} matches.", locationList.getLocations().size(), locationId, location.size());
         log.debug(location.size()>0 ? location.get(0).toString() : "NOT FOUND");
         Optional<Location> response = location.size()==1 ? Optional.of(location.get(0)) : Optional.empty();
         return new Entity<>(response, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());

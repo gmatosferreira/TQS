@@ -29,7 +29,7 @@ public class WarningService {
     public Entity<List<Warning>> getAllWarnings() {
         // Get data from API or cache
         List<Warning> warningsList = this.getWarnings();
-        log.debug(String.format("GET warnings list from API returned list of size %d", warningsList.size()));
+        log.debug("GET warnings list from API returned list of size {}", warningsList.size());
         // Return locations list
         return new Entity<>(warningsList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -37,7 +37,7 @@ public class WarningService {
     public Entity<List<Warning>> getLocationWarnings(String location) {
         // Get data from API or cache
         List<Warning> warningsList = this.getWarnings().stream().filter(w -> w.getLocation().equals(location)).collect(Collectors.toList());
-        log.debug(String.format("GET warnings list from API filtered by location %s returned list of size %d", location, warningsList.size()));
+        log.debug("GET warnings list from API filtered by location {} returned list of size {}", location, warningsList.size());
         // Return locations list
         return new Entity<>(warningsList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
