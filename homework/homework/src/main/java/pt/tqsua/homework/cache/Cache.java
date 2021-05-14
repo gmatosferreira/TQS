@@ -96,13 +96,13 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @return
      */
     private List<String> getExpiredKeys() {
-        List<String> expired = new ArrayList<>();
-        for(String key:entries.keySet()) {
-            if(entries.get(key).expired()) {
-                expired.add(key);
+        List<String> expiredKeys = new ArrayList<>();
+        for(Map.Entry<String, CacheEntry<T>> entry:entries.entrySet()) {
+            if(entry.getValue().expired()) {
+                expiredKeys.add(entry.getKey());
             }
         }
-        return expired;
+        return expiredKeys;
     }
 
     // Stats
