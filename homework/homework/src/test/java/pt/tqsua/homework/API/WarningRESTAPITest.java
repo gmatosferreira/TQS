@@ -41,8 +41,8 @@ public class WarningRESTAPITest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         if (response.getBody().getData().size()>0) {
             assertThat(response.getBody().getData())
-                .extracting(Warning::getLevel);
-                // .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN, AwarenessLevel.ORANGE, AwarenessLevel.RED, AwarenessLevel.YELLOW));
+                .extracting(Warning::getLevel)
+                .containsAnyElementsOf(Arrays.asList(AwarenessLevel.GREEN.toString(), AwarenessLevel.ORANGE.toString(), AwarenessLevel.RED.toString(), AwarenessLevel.YELLOW.toString()));
         }
         assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
