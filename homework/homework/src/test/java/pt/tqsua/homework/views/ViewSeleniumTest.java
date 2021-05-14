@@ -5,13 +5,19 @@ import org.junit.BeforeClass;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ViewSeleniumTest {
 
     private SeleniumConfig config;
+
+    @LocalServerPort
+    int randomServerPort;
 
     @BeforeEach
     public void setUp() {
@@ -25,7 +31,7 @@ public class ViewSeleniumTest {
 
     @Test
     public void test() {
-        ViewObject view = new ViewObject(config.getDriver());
+        ViewObject view = new ViewObject(config.getDriver(), randomServerPort);
 
         // Validate general stuff
         assertTrue(view.isTitleValid());

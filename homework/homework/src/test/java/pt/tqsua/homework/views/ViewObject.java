@@ -15,7 +15,7 @@ public class ViewObject {
     private WebDriver driver;
 
     // Context variables
-    public static final String URL = "http://127.0.0.1:8080/";
+    public static final String URL = "http://127.0.0.1";
     public static final String LOCATIONS_URL = "/api/location/";
     public static final String UVINDEXES_URL = "/api/uvindexes/";
     public static final String ALERTS_URL = "/api/warnings/";
@@ -60,9 +60,9 @@ public class ViewObject {
     WebElement alertsBadges;
 
     // Constructor
-    public ViewObject(WebDriver driver) {
+    public ViewObject(WebDriver driver, int port) {
         this.driver = driver;
-        this.driver.get(URL);
+        this.driver.get(String.format("%s:%d/", URL, port));
         // Initialize elements
         PageFactory.initElements(this.driver, this);
         // Wait to make request to API and render elements
