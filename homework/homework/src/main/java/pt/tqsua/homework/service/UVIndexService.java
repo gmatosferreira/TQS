@@ -24,7 +24,7 @@ public class UVIndexService {
 
     private Cache<List<UVIndex>> cache = new Cache<>();
 
-    static String APIURL = "https://api.ipma.pt/open-data/forecast/meteorology/uv/uv.json";
+    static String apiURL = "https://api.ipma.pt/open-data/forecast/meteorology/uv/uv.json";
 
     public Entity<List<UVIndex>> getAllIndexes() {
         // Get data from API or cache
@@ -52,20 +52,20 @@ public class UVIndexService {
 
     private List<UVIndex> getWarnings() {
         // Check if cache has locations
-        Optional<List<UVIndex>> list = cache.get(UVIndexService.APIURL);
+        Optional<List<UVIndex>> list = cache.get(UVIndexService.apiURL);
         if(list.isPresent()) {
             log.debug("Cache has it, getting...");
             return list.get();
         }
         log.debug("Cache does not have it, getting from API...");
         // If it has not, make request to API
-        UVIndex[] response = restTemplate.getForObject(UVIndexService.APIURL, UVIndex[].class);
+        UVIndex[] response = restTemplate.getForObject(UVIndexService.apiURL, UVIndex[].class);
         if(response==null) {
             response = new UVIndex[0];
         }
         List<UVIndex> indexes = response.length>0 ? Arrays.asList(response) : Arrays.asList();
         // Save to cache
-        this.cache.put(UVIndexService.APIURL, indexes);
+        this.cache.put(UVIndexService.apiURL, indexes);
         return indexes;
     }
 

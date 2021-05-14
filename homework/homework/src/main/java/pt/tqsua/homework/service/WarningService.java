@@ -24,7 +24,7 @@ public class WarningService {
 
     private Cache<List<Warning>> cache = new Cache<>();
 
-    static String APIURL = "https://api.ipma.pt/open-data/forecast/warnings/warnings_www.json";
+    static String apiURL = "https://api.ipma.pt/open-data/forecast/warnings/warnings_www.json";
 
     public Entity<List<Warning>> getAllWarnings() {
         // Get data from API or cache
@@ -44,20 +44,20 @@ public class WarningService {
 
     private List<Warning> getWarnings() {
         // Check if cache has locations
-        Optional<List<Warning>> list = cache.get(WarningService.APIURL);
+        Optional<List<Warning>> list = cache.get(WarningService.apiURL);
         if(list.isPresent()) {
             log.debug("Cache has it, getting...");
             return list.get();
         }
         log.debug("Cache does not have it, getting from API...");
         // If it has not, make request to API
-        Warning[] response = restTemplate.getForObject(WarningService.APIURL, Warning[].class);
+        Warning[] response = restTemplate.getForObject(WarningService.apiURL, Warning[].class);
         if(response==null) {
             response = new Warning[0];
         }
         List<Warning> warnings = response.length>0 ? Arrays.asList(response) : Arrays.asList();
         // Save to cache
-        this.cache.put(WarningService.APIURL, warnings);
+        this.cache.put(WarningService.apiURL, warnings);
         return warnings;
     }
 

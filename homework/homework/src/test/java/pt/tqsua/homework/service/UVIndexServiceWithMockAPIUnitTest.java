@@ -50,7 +50,7 @@ class UVIndexServiceWithMockAPIUnitTest {
             indexes[2].setIndex(indexes[2].getIndex());
 
             // Mock real API
-            when(restTemplate.getForObject(UVIndexService.APIURL, UVIndex[].class)).thenReturn(indexes);
+            when(restTemplate.getForObject(UVIndexService.apiURL, UVIndex[].class)).thenReturn(indexes);
         }
 
         @Test
@@ -124,7 +124,7 @@ class UVIndexServiceWithMockAPIUnitTest {
         @BeforeEach
         public void setUp() {
             // Mock real API
-            when(restTemplate.getForObject(UVIndexService.APIURL, UVIndex[].class)).thenReturn(new UVIndex[0]);
+            when(restTemplate.getForObject(UVIndexService.apiURL, UVIndex[].class)).thenReturn(new UVIndex[0]);
         }
 
         @Test

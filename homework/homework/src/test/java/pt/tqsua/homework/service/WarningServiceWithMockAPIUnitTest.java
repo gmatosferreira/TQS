@@ -39,7 +39,7 @@ class WarningServiceWithMockAPIUnitTest {
             ws[1] = new Warning("Nevoeiro", "Ondas altas", new Timestamp(1546344000000L).toLocalDateTime(), new Timestamp(1546516800000L).toLocalDateTime(), AwarenessLevel.ORANGE, "AVR");
 
             // Mock real API
-            when(restTemplate.getForObject(WarningService.APIURL, Warning[].class)).thenReturn(ws);
+            when(restTemplate.getForObject(WarningService.apiURL, Warning[].class)).thenReturn(ws);
         }
 
         @Test
@@ -81,7 +81,7 @@ class WarningServiceWithMockAPIUnitTest {
         @BeforeEach
         void setUp() {
             // Mock real API
-            when(restTemplate.getForObject(WarningService.APIURL, Warning[].class)).thenReturn(new Warning[0]);
+            when(restTemplate.getForObject(WarningService.apiURL, Warning[].class)).thenReturn(new Warning[0]);
         }
 
         @Test
