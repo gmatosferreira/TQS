@@ -35,8 +35,11 @@ public class LocationController {
     @GetMapping("/locations/{locationId}")
     public ResponseEntity<Entity<Optional<Location>>> getLocationById(@PathVariable @NotNull Integer locationId) {
         Entity<Optional<Location>> l = locationService.getLocationDetails(locationId);
-        Location location = l.getData().isPresent() ? l.getData().get() : null;
-        HttpStatus status = l.getData().isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
+        Location location = null;
+        if (l.getData().isPresent()) {
+            location = l.getData().get();
+        }
+        HttpStatus status = location!=null ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(l, status);
     }
 

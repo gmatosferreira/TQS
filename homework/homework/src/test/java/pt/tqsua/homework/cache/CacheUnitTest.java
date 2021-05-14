@@ -50,19 +50,19 @@ public class CacheUnitTest {
         @Test
         public void whenPut_containsKey() {
             // contains and validate
-            assertThat(this.cache.containsKey(exKey), is(true));
+            assertThat(this.cache.isPresent(exKey), is(true));
         }
 
         @Test
         public void whenRemove_doesNotContain() {
             // contains and validate
-            assertThat(this.cache.containsKey(exKey), is(true));
+            assertThat(this.cache.isPresent(exKey), is(true));
 
             // remove
             this.cache.remove(exKey);
 
             // contains and validate
-            assertThat(this.cache.containsKey(exKey), is(false));
+            assertThat(this.cache.isPresent(exKey), is(false));
         }
 
         @Test
@@ -74,7 +74,7 @@ public class CacheUnitTest {
         @Test
         public void whenTTLNotExceeded_contains() {
             // contains and validate
-            assertThat(this.cache.containsKey(exKeyTTL), is(true));
+            assertThat(this.cache.isPresent(exKeyTTL), is(true));
         }
 
         @Test
@@ -82,7 +82,7 @@ public class CacheUnitTest {
             // wait for TTL to exceed
             TimeUnit.SECONDS.sleep(exTTL+1);
             // contains and validate
-            assertThat(this.cache.containsKey(exKeyTTL), is(false));
+            assertThat(this.cache.isPresent(exKeyTTL), is(false));
         }
 
         @Test
@@ -154,7 +154,7 @@ public class CacheUnitTest {
         @Test
         public void whenEmpty_doesNotContain() {
             // contains and validate
-            assertThat(this.cache.containsKey("ABC"), is(false));
+            assertThat(this.cache.isPresent("ABC"), is(false));
         }
 
         @Test

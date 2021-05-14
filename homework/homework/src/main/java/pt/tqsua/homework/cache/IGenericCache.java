@@ -10,7 +10,7 @@ public interface IGenericCache<K, V> {
 
     int clear();
 
-    boolean containsKey(K key);
+    boolean isPresent(K key);
 
     Optional<V> get(K key);
 

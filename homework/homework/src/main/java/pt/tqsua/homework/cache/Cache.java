@@ -44,7 +44,7 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @param key String with cache key
      * @return boolean true if key exists in cache
      */
-    public boolean containsKey(String key) {
+    public boolean isPresent(String key) {
         this.clean();
         this.misses += !entries.containsKey(key) ? 1 : 0;
         return entries.containsKey(key);
