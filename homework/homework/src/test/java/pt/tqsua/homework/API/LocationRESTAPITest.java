@@ -60,7 +60,7 @@ public class LocationRESTAPITest {
                 .hasSize(2)
                 .extracting(Location::getName)
                 .containsExactly("Braga", "Bragança");
-        aassertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
+        assertThat(response.getBody().getRequests()).isGreaterThanOrEqualTo(1);
         assertThat(response.getBody().getCacheSize()).isEqualTo(1);
     }
 
