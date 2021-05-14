@@ -1,5 +1,7 @@
 package pt.tqsua.homework.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class WarningService {
 
+    private static final Logger log = LoggerFactory.getLogger(WarningService.class);
+
     @Autowired
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -25,7 +29,7 @@ public class WarningService {
     public Entity<List<Warning>> getAllWarnings() {
         // Get data from API or cache
         List<Warning> warningsList = this.getWarnings();
-        System.out.println(String.format("GET warnings list from API returned list of size %d", warningsList.size()));
+        log.debug(String.format("GET warnings list from API returned list of size %d", warningsList.size()));
         // Return locations list
         return new Entity<>(warningsList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -33,7 +37,7 @@ public class WarningService {
     public Entity<List<Warning>> getLocationWarnings(String location) {
         // Get data from API or cache
         List<Warning> warningsList = this.getWarnings().stream().filter(w -> w.getLocation().equals(location)).collect(Collectors.toList());
-        System.out.println(String.format("GET warnings list from API filtered by location %s returned list of size %d", location, warningsList.size()));
+        log.debug(String.format("GET warnings list from API filtered by location %s returned list of size %d", location, warningsList.size()));
         // Return locations list
         return new Entity<>(warningsList, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -42,10 +46,10 @@ public class WarningService {
         // Check if cache has locations
         Optional<List<Warning>> list = cache.get(WarningService.API_URL);
         if(list.isPresent()) {
-            System.out.println("Cache has it, getting...");
+            log.debug("Cache has it, getting...");
             return list.get();
         }
-        System.out.println("Cache does not have it, getting from API...");
+        log.debug("Cache does not have it, getting from API...");
         // If it has not, make request to API
         Warning[] response = restTemplate.getForObject(WarningService.API_URL, Warning[].class);
         if(response==null) {

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -24,6 +26,8 @@ import java.util.Optional;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LocationRESTAPITest {
+
+    private static final Logger log = LoggerFactory.getLogger(LocationRESTAPITest.class);
 
     @LocalServerPort
     int randomServerPort;
@@ -82,7 +86,7 @@ public class LocationRESTAPITest {
     public void givenLocation_whenGetLocation_thenReturnLocation() {
          // Make request to API
         ResponseEntity<Entity<Location>> response = restTemplate.exchange(String.format("/api/locations/%d", 1010500), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<Location>>() {});
-        System.out.println(response.getBody());
+        log.debug(response.getBody().toString());
         // Validate response
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
         assertThat(response.getBody().getData().getName()).isEqualTo("Aveiro");

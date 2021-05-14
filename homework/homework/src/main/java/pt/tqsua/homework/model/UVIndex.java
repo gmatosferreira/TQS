@@ -3,6 +3,8 @@ package pt.tqsua.homework.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -10,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UVIndex {
+
+    private static final Logger log = LoggerFactory.getLogger(UVIndex.class);
 
     private int start;
     private int end;
@@ -140,7 +144,7 @@ public class UVIndex {
      * @return isDay true if index matches
      */
     public boolean isDay(int day) {
-        System.out.println(String.format("Difference between %s and %s:", this.date.toString(), new Date().toString()));
+        log.debug(String.format("Difference between %s and %s:", this.date.toString(), new Date().toString()));
         /*
         long diffInMillies = Math.abs(this.date.getTime()-new Date().getTime());
         int diff = (int)TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
@@ -155,7 +159,7 @@ public class UVIndex {
         indexDate.setTime(this.date);
 
         int diff = indexDate.get(Calendar.DAY_OF_MONTH)-now.get(Calendar.DAY_OF_MONTH);
-        System.out.println(String.format("Returned %d days", diff));
+        log.debug(String.format("Returned %d days", diff));
         if (diff == day) {
             return true;
         }

@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 import pt.tqsua.homework.model.Entity;
 import pt.tqsua.homework.model.UVIndex;
@@ -23,6 +25,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UVIndexServiceWithMockAPIUnitTest {
+
+    private static final Logger log = LoggerFactory.getLogger(UVIndexServiceWithMockAPIUnitTest.class);
 
     @Mock(lenient = true)
     private RestTemplate restTemplate;
@@ -58,7 +62,7 @@ public class UVIndexServiceWithMockAPIUnitTest {
             Entity<List<UVIndex>> response = service.getAllIndexes();
 
             for(UVIndex u:response.getData()) {
-                System.out.println(u);
+                log.debug(u.toString());
             }
 
             // Test response

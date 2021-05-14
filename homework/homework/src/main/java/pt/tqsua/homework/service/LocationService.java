@@ -1,5 +1,7 @@
 package pt.tqsua.homework.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +17,8 @@ import java.util.stream.Collectors;
 @Service
 public class LocationService {
 
+    private static final Logger log = LoggerFactory.getLogger(LocationService.class);
+
     // https://stackoverflow.com/questions/28024942/how-to-autowire-resttemplate-using-annotations
     // https://howtodoinjava.com/spring-boot2/resttemplate/spring-restful-client-resttemplate-example/
     // https://spring.io/guides/gs/consuming-rest/
@@ -29,7 +33,7 @@ public class LocationService {
     public Entity<List<Location>> getAllLocations() {
         // Get data from API or cache
         LocationsList locationList = this.getLocations();
-        System.out.println(String.format("GET locations list from API returned list of size %d", locationList.getLocations().size()));
+        log.debug(String.format("GET locations list from API returned list of size %d", locationList.getLocations().size()));
         // Return locations list
         return new Entity<>(locationList.getLocations(), this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -39,8 +43,8 @@ public class LocationService {
         LocationsList locationList = this.getLocations();
         // Filter by name
         List<Location> location = locationList.getLocations().stream().filter(l -> l.getName().toLowerCase().contains(nameMatch.toLowerCase())).collect(Collectors.toList());
-        System.out.println(String.format("Filtering %d locations for name %s and got %d matches.", locationList.getLocations().size(), nameMatch, location.size()));
-        System.out.println(location.size()>0 ? location.get(0) : "NOT FOUND");
+        log.debug(String.format("Filtering %d locations for name %s and got %d matches.", locationList.getLocations().size(), nameMatch, location.size()));
+        log.debug(location.size()>0 ? location.get(0).toString() : "NOT FOUND");
         return new Entity<>(location, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
 
@@ -49,8 +53,8 @@ public class LocationService {
         LocationsList locationList = this.getLocations();
         // Filter by given ID
         List<Location> location = locationList.getLocations().stream().filter(l -> l.getId().equals(locationId)).collect(Collectors.toList());
-        System.out.println(String.format("Filtering %d locations for ID %d and got %d matches.", locationList.getLocations().size(), locationId, location.size()));
-        System.out.println(location.size()>0 ? location.get(0) : "NOT FOUND");
+        log.debug(String.format("Filtering %d locations for ID %d and got %d matches.", locationList.getLocations().size(), locationId, location.size()));
+        log.debug(location.size()>0 ? location.get(0).toString() : "NOT FOUND");
         Optional<Location> response = location.size()==1 ? Optional.of(location.get(0)) : Optional.empty();
         return new Entity<>(response, this.cache.getHits(), this.cache.getMisses(), this.cache.getSize(), this.cache.getExpired());
     }
@@ -59,10 +63,10 @@ public class LocationService {
         // Check if cache has locations
         Optional<LocationsList> list = cache.get(LocationService.API_URL);
         if(list.isPresent()) {
-            System.out.println("Cache has it, getting...");
+            log.debug("Cache has it, getting...");
             return list.get();
         }
-        System.out.println("Cache does not have it, getting from API...");
+        log.debug("Cache does not have it, getting from API...");
         // If it has not, make request to API
         LocationsList locations = restTemplate.getForObject(LocationService.API_URL, LocationsList.class);
         if(locations==null) {

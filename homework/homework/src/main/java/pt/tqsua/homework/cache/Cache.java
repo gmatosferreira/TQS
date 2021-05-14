@@ -1,8 +1,13 @@
 package pt.tqsua.homework.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 public class Cache<T> implements IGenericCache<String, T>{
+
+    private static final Logger log = LoggerFactory.getLogger(Cache.class);
 
     public static final int DEFAULTTTL = CacheEntry.DEFAULTTTL;
 
@@ -12,7 +17,7 @@ public class Cache<T> implements IGenericCache<String, T>{
     private int expired;
 
     public Cache() {
-        System.out.println("\n\nNEW CACHE\n\n");
+        log.debug("A new CACHE was created!");
         this.entries = new HashMap<>();
     }
 
@@ -60,7 +65,7 @@ public class Cache<T> implements IGenericCache<String, T>{
         Optional<T> entry = entries.containsKey(key) ? Optional.of(entries.get(key).getValue()) : Optional.empty();
         this.hits += entry.isPresent() ? 1 : 0;
         this.misses += entry.isEmpty() ? 1 : 0;
-        System.out.println(String.format("Get from cache with %d hits and %d misses", this.hits, this.misses));
+        log.debug(String.format("Get from cache with %d hits and %d misses", this.hits, this.misses));
         return entry;
     };
 
@@ -71,7 +76,7 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @param ttl
      */
     public void put(String key, T value, int ttl) {
-        entries.put(key, new CacheEntry(value, ttl));
+        entries.put(key, new CacheEntry<T>(value, ttl));
     };
 
     /**
@@ -80,7 +85,7 @@ public class Cache<T> implements IGenericCache<String, T>{
      * @param value
      */
     public void put(String key, T value) {
-        entries.put(key, new CacheEntry(value));
+        entries.put(key, new CacheEntry<T>(value));
     };
 
     /**
