@@ -1,0 +1,98 @@
+package pt.tqsua.homework.API;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import pt.tqsua.homework.model.Entity;
+import pt.tqsua.homework.model.UVIndex;
+import pt.tqsua.homework.model.Warning;
+import pt.tqsua.homework.model.enums.AwarenessLevel;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class UVIndexRESTAPITest {
+
+    @LocalServerPort
+    int randomServerPort;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    @Order(1)
+    public void whenGetIndexes_thenReturnJsonArray() {
+        // Make request to API
+        ResponseEntity<Entity<List<UVIndex>>> response = restTemplate.exchange("/api/uvindexes", HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<UVIndex>>>() {});
+
+        // Validate response
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getData())
+            .extracting(UVIndex::getIndexClass)
+            .containsAnyElementsOf(Arrays.asList("Extremo", "Muito Elevado", "Elevado", "Moderado", "Baixo"));
+        assertThat(response.getBody().getRequests()).isEqualTo(1);
+        assertThat(response.getBody().getCacheHits()).isEqualTo(0);
+        assertThat(response.getBody().getCacheMisses()).isEqualTo(1);
+        assertThat(response.getBody().getCacheSize()).isEqualTo(1);
+        assertThat(response.getBody().getCacheExpired()).isEqualTo(0);
+    }
+
+    @Test
+    @Order(2)
+    public void whenGetByLocation_thenReturnList() {
+        int location = 3480200;
+        // Make request to API
+        ResponseEntity<Entity<List<UVIndex>>> response = restTemplate.exchange(String.format("/api/uvindexes/%d", location), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<UVIndex>>>() {});
+
+        // Validate response
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getData())
+            .extracting(UVIndex::getIndexClass)
+            .containsAnyElementsOf(Arrays.asList("Extremo", "Muito Elevado", "Elevado", "Moderado", "Baixo"));
+        assertThat(response.getBody().getData())
+            .extracting(UVIndex::getLocation)
+            .containsOnly(location);
+        assertThat(response.getBody().getRequests()).isEqualTo(2);
+        assertThat(response.getBody().getCacheHits()).isEqualTo(1);
+        assertThat(response.getBody().getCacheMisses()).isEqualTo(1);
+        assertThat(response.getBody().getCacheSize()).isEqualTo(1);
+        assertThat(response.getBody().getCacheExpired()).isEqualTo(0);
+    }
+
+    @Test
+    @Order(3)
+    public void whenGetByLocationAndDayIndex_thenReturnList() {
+        int location = 3480200;
+        int index = 0;
+        // Make request to API
+        ResponseEntity<Entity<List<UVIndex>>> response = restTemplate.exchange(String.format("/api/uvindexes/%d/%d", location, index), HttpMethod.GET, null, new ParameterizedTypeReference<Entity<List<UVIndex>>>() {});
+
+        // Validate response
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getData())
+                .extracting(UVIndex::getIndexClass)
+                .containsAnyElementsOf(Arrays.asList("Extremo", "Muito Elevado", "Elevado", "Moderado", "Baixo"));
+        assertThat(response.getBody().getData())
+                .extracting(UVIndex::getLocation)
+                .containsOnly(location);
+        assertThat(response.getBody().getData().stream().allMatch(i -> i.isDay(index))).isTrue();
+        assertThat(response.getBody().getRequests()).isEqualTo(3);
+        assertThat(response.getBody().getCacheHits()).isEqualTo(2);
+        assertThat(response.getBody().getCacheMisses()).isEqualTo(1);
+        assertThat(response.getBody().getCacheSize()).isEqualTo(1);
+        assertThat(response.getBody().getCacheExpired()).isEqualTo(0);
+    }
+}

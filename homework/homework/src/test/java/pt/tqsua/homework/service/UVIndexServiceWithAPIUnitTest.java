@@ -23,11 +23,8 @@ public class UVIndexServiceWithAPIUnitTest {
         Entity<List<UVIndex>> response = service.getAllIndexes();
 
         // Test response
-        // It is possible that there are no warnings
-        if (response.getData().size()>0) {
-            assertThat(response.getData())
+        assertThat(response.getData())
             .hasSizeGreaterThan(18); // At least 18 districts data
-        }
     }
 
     @Test
