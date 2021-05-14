@@ -17,11 +17,6 @@ public class HomeworkApplication {
 		return new RestTemplate();
 	}
 
-	@Bean
-	public Cache cache() {
-		return new Cache<>();
-	}
-
 	private static final Logger log = LoggerFactory.getLogger(HomeworkApplication.class);
 
 	public static void main(String[] args) {
