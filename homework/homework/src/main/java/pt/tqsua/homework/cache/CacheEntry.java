@@ -4,7 +4,7 @@ import java.time.Instant;
 
 public class CacheEntry<T> {
 
-    public static final int DEFAULTTTL = 5;
+    public static final int DEFAULTTTL = 120; // in seconds
 
     private Instant created;
     private int ttl;
@@ -17,7 +17,6 @@ public class CacheEntry<T> {
     }
 
     public CacheEntry(T value) {
-        // Default ttl of 30 seconds
         this(value, DEFAULTTTL);
     }
 
