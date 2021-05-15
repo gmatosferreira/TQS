@@ -1,6 +1,6 @@
 # Meteorology and UV index alerts
 
-This project was developed in the context of [Software Quality And Tests](https://www.ua.pt/en/uc/8109) curricular unit, part of the Computer Science Bachelor at [Aveiro University](https://www.ua.pt/).
+This project was developed in the context of [Software Quality And Tests](https://www.ua.pt/en/uc/8109) curricular unit, part of the Computer Science Bachelor at [Aveiro University](https://www.ua.pt/). It was lectured by [Ilídio Oliveira](https://www.ua.pt/pt/p/10318398) during the 2020/2021school year.
 
 It was not graded yet.
 
